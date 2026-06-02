@@ -15,6 +15,7 @@ summary {
   font-weight: bold;
   padding: 0.5em;
   transition-duration: 0.4s;
+  cursor: pointer;
 }
 
 details[open] summary {
@@ -80,6 +81,10 @@ ul {
   display: grid;
   margin: 2px 0 0 0;
   padding: 0;
+}
+
+details ul {
+  grid-template-columns: 1fr 1fr;
 }
 
 p[hidden], button[hidden], div[hidden]{

@@ -598,17 +598,18 @@ function update_area_info(event_location)
     area_info_label.style.top  = `${event_location.y + 24}px`;
 
     let share_position = get_tile32_position(event_location);
+    area_info_label.textContent = `x: ${share_position.x - measures.offset.x}, y: ${image.size.y / 32 - share_position.y - measures.offset.y - 1}\n`;
 
-    //Check if we have areas
+    // Don't proceed if we don't have area info.
     if (!("points" in image.areas) || !(share_position.y in image.areas.map))
-    {
-        area_info_label.textContent = `x: ${share_position.x - measures.offset.x}, y: ${image.size.y / 32 - share_position.y - measures.offset.y - 1}\n`;
         return;
-    }
 
     var _id = image.areas.map[share_position.y].slice(share_position.x*2, share_position.x*2+2);
     var _name = _id in image.areas.points ? image.areas.points[_id].name : "";
-    area_info_label.textContent = `"${_name}" - x: ${share_position.x - measures.offset.x}, y: ${image.size.y / 32 - share_position.y - measures.offset.y - 1}\n`;
+    if (_name.length > 34)
+        _name = _name.slice(0, 34) + '\n' + _name.slice(34);
+
+    area_info_label.textContent = `"${_name}"\n` + area_info_label.textContent;
 
     var _prot = _id in image.areas.points ? image.areas.points[_id].protections : "";
     if (!_prot)
