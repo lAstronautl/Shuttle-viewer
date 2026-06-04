@@ -35,7 +35,7 @@
       }
     },
     {
-      "name": "KMCC Freight Hub",
+      "name": "TMCC Freight Hub",
       "size": 8,
       "position": {
         "x": 187,
@@ -43,7 +43,7 @@
       }
     },
     {
-      "name": "KMCC Departures",
+      "name": "TMCC Departures",
       "size": 6,
       "position": {
         "x": 178,
@@ -51,7 +51,7 @@
       }
     },
     {
-      "name": "KMCC Mining South",
+      "name": "TMCC Mining South",
       "size": 6,
       "position": {
         "x": 190,
@@ -59,7 +59,7 @@
       }
     },
     {
-      "name": "KMCC Mining SE",
+      "name": "TMCC Mining SE",
       "size": 6,
       "position": {
         "x": 200,

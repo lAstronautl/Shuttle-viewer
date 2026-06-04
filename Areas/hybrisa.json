@@ -24,27 +24,27 @@
             "weedkiller": "LZ1"
         },
         "06": {
-            "name": "KMCC Interstellar Freight Hub - Cargo Processing Center - Maintenance",
+            "name": "TMCC Interstellar Freight Hub - Cargo Processing Center - Maintenance",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
         "07": {
-            "name": "KMCC Interstellar Freight Hub - Fuel Storage & Maintenance - North",
+            "name": "TMCC Interstellar Freight Hub - Fuel Storage & Maintenance - North",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
         "08": {
-            "name": "KMCC Interstellar Freight Hub - Landing Zone Two",
+            "name": "TMCC Interstellar Freight Hub - Landing Zone Two",
             "protections": "11111111",
             "weedkiller": "LZ2"
         },
         "09": {
-            "name": "KMCC - Mining Outpost - South - Vehicle Deployment Entrance",
+            "name": "TMCC - Mining Outpost - South - Vehicle Deployment Entrance",
             "protections": "11111111",
             "weedkiller": "LZ2"
         },
         "0a": {
-            "name": "KMCC - Mining Outpost - Southeast",
+            "name": "TMCC - Mining Outpost - Southeast",
             "protections": "11001011"
         },
         "0b": {
@@ -57,12 +57,12 @@
             "protections": "00000000"
         },
         "0d": {
-            "name": "KMCC - Mining Outpost - East - Command Center",
+            "name": "TMCC - Mining Outpost - East - Command Center",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
         "0e": {
-            "name": "KMCC Interstellar Freight Hub - Cargo Processing Center",
+            "name": "TMCC Interstellar Freight Hub - Cargo Processing Center",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
@@ -81,7 +81,7 @@
             "weedkiller": "LZ1"
         },
         "12": {
-            "name": "KMCC - Mining Outpost - East",
+            "name": "TMCC - Mining Outpost - East",
             "protections": "11001011",
             "weedkiller": "LZ1, LZ2"
         },
@@ -91,7 +91,7 @@
             "weedkiller": "LZ1, LZ2"
         },
         "14": {
-            "name": "KMCC Interstellar Freight Hub - Cargo Processing Center - Main Entrance & South Unloading Platform",
+            "name": "TMCC Interstellar Freight Hub - Cargo Processing Center - Main Entrance & South Unloading Platform",
             "protections": "11111111",
             "weedkiller": "LZ2"
         },
@@ -101,12 +101,12 @@
             "weedkiller": "LZ1"
         },
         "16": {
-            "name": "KMCC - Mining Outpost - South - Vehicle Deployment",
+            "name": "TMCC - Mining Outpost - South - Vehicle Deployment",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
         "17": {
-            "name": "KMCC - Mining Outpost - East - Deployment Bay",
+            "name": "TMCC - Mining Outpost - East - Deployment Bay",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
@@ -139,7 +139,7 @@
             "weedkiller": "LZ1"
         },
         "1e": {
-            "name": "KMCC - Mining Outpost - South - Processing & Storage",
+            "name": "TMCC - Mining Outpost - South - Processing & Storage",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
@@ -149,7 +149,7 @@
             "weedkiller": "LZ1"
         },
         "20": {
-            "name": "KMCC - Mining Outpost - Northeast",
+            "name": "TMCC - Mining Outpost - Northeast",
             "protections": "11001011",
             "weedkiller": "LZ1"
         },
@@ -164,7 +164,7 @@
             "weedkiller": "LZ1"
         },
         "23": {
-            "name": "KMCC - Mining Outpost - East - Subspace-Communications",
+            "name": "TMCC - Mining Outpost - East - Subspace-Communications",
             "protections": "11111111",
             "weedkiller": "LZ1, LZ2"
         },
@@ -177,7 +177,7 @@
             "protections": "11001011"
         },
         "26": {
-            "name": "KMCC - Mining Outpost - East - Dorms",
+            "name": "TMCC - Mining Outpost - East - Dorms",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
@@ -187,7 +187,7 @@
             "weedkiller": "LZ1"
         },
         "28": {
-            "name": "KMCC Interstellar Freight Hub - Passenger Departures - South Office",
+            "name": "TMCC Interstellar Freight Hub - Passenger Departures - South Office",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
@@ -197,27 +197,27 @@
             "weedkiller": "LZ2"
         },
         "2a": {
-            "name": "KMCC Interstellar Freight Hub - Security Checkpoint Office",
+            "name": "TMCC Interstellar Freight Hub - Security Checkpoint Office",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
         "2b": {
-            "name": "KMCC Interstellar Freight Hub - Flight Control Room",
+            "name": "TMCC Interstellar Freight Hub - Flight Control Room",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
         "2c": {
-            "name": "KMCC Interstellar Freight Hub - Passenger Departures - Hallway",
+            "name": "TMCC Interstellar Freight Hub - Passenger Departures - Hallway",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
         "2d": {
-            "name": "KMCC Interstellar Freight Hub - Passenger Departures - Maintenance",
+            "name": "TMCC Interstellar Freight Hub - Passenger Departures - Maintenance",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
         "2e": {
-            "name": "KMCC Interstellar Freight Hub - Dropship Normandy Console",
+            "name": "TMCC Interstellar Freight Hub - Dropship Normandy Console",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
@@ -240,12 +240,12 @@
             "protections": "11001011"
         },
         "33": {
-            "name": "KMCC Interstellar Freight Hub - Passenger Departures - Lounge North",
+            "name": "TMCC Interstellar Freight Hub - Passenger Departures - Lounge North",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
         "34": {
-            "name": "KMCC Interstellar Freight Hub - Passenger Departures - Lounge South",
+            "name": "TMCC Interstellar Freight Hub - Passenger Departures - Lounge South",
             "protections": "11001011",
             "weedkiller": "LZ2"
         },
@@ -596,7 +596,7 @@
             "protections": "11001011"
         },
         "86": {
-            "name": "KMCC - Mining Outpost - North - Maintenance",
+            "name": "TMCC - Mining Outpost - North - Maintenance",
             "protections": "11001011"
         },
         "87": {
@@ -624,7 +624,7 @@
             "protections": "00000010"
         },
         "8d": {
-            "name": "KMCC - Mining Outpost - North",
+            "name": "TMCC - Mining Outpost - North",
             "protections": "11001011"
         },
         "8e": {
