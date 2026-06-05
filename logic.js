@@ -594,8 +594,9 @@ function update_tile_cursor(event_location)
 // Updates Area Info label with new information.
 function update_area_info(event_location)
 {
-    area_info_label.style.left = `${event_location.x + 24}px`;
-    area_info_label.style.top  = `${event_location.y + 24}px`;
+    // Update Area Info position, uses webpage sizes to dissallow clipping out of borders.
+    area_info_label.style.left = event_location.x + area_info_label.offsetWidth  >= window.innerWidth ? `${window.innerWidth - area_info_label.offsetWidth - 6}px` : `${event_location.x + 12}px`;
+    area_info_label.style.top  = event_location.y + area_info_label.offsetHeight >= window.innerHeight ? `${window.innerHeight - area_info_label.offsetHeight - 18}px` : `${event_location.y + 12}px`;
 
     let share_position = get_tile32_position(event_location);
     area_info_label.textContent = `x: ${share_position.x - measures.offset.x}, y: ${image.size.y / 32 - share_position.y - measures.offset.y - 1}\n`;
@@ -605,12 +606,14 @@ function update_area_info(event_location)
         return;
 
     var _id = image.areas.map[share_position.y].slice(share_position.x*2, share_position.x*2+2);
+    // Get name, split it if larger then 34 letters.
     var _name = _id in image.areas.points ? image.areas.points[_id].name : "";
     if (_name.length > 34)
         _name = _name.slice(0, 34) + '\n' + _name.slice(34);
 
     area_info_label.textContent = `"${_name}"\n` + area_info_label.textContent;
 
+    // Check if protections exists, don't proceed if they dont
     var _prot = _id in image.areas.points ? image.areas.points[_id].protections : "";
     if (!_prot)
         return;
@@ -619,6 +622,7 @@ function update_area_info(event_location)
     area_info_label.textContent += ` MortarPlace: ${ (_prot[3] == 1) ? "✅" : "❌"} | MortarFire: ${ (_prot[4] == 1) ? "✅" : "❌"}\n`;
     area_info_label.textContent += ` Medevac: ${ (_prot[5] == 1) ? "✅" : "❌"} | OB: ${ (_prot[6] == 1) ? "✅" : "❌"} | SupplyDrop: ${ (_prot[7] == 1) ? "✅" : "❌"}`;
 
+    // Don't proceed if no weedkiller
     var _weed = _id in image.areas.points && "weedkiller" in image.areas.points[_id] ? image.areas.points[_id].weedkiller : "";
     if (!_weed)
         return;
@@ -626,7 +630,7 @@ function update_area_info(event_location)
     area_info_label.textContent += `\n\n Weedkiller: ${_weed}`
 }
 
-//
+// Moves camera to new position
 function move_to(position)
 {
     if (!position)
