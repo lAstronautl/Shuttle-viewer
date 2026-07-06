@@ -201,43 +201,75 @@
   ],
   "inserts": [
     {
-      "name": "Medbay (50%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/medbay-v3-0.webp",
+      "name": "Admin PMC (40%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/admin_pmc-0.webp",
       "position": {
-        "x": 55,
-        "y": 74
+        "x": 74,
+        "y": 100
       }
     },
     {
-      "name": "Medbay Passage (50%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/medbay-passage-0.webp",
+      "name": "Cargo Containers (30%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/cargo_containers-0.webp",
       "position": {
-        "x": 76,
-        "y": 78
+        "x": 47,
+        "y": 118
       }
     },
     {
-      "name": "Lambda Cave Extratunnel (50%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/lambda-cave_extratunnel-0.webp",
+      "name": "Chapel Cult (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/chapel_cult-0.webp",
       "position": {
-        "x": 182,
-        "y": 89
+        "x": 148,
+        "y": 100
       }
     },
     {
-      "name": "SE Checkpoint (70%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/se-checkpoint-0.webp",
+      "name": "CLF Mining (10%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/clfmining-0.webp",
       "position": {
-        "x": 134,
-        "y": 130
+        "x": 14,
+        "y": 200
+      },
+      "offset": {
+          "x": 1,
+          "y": 0
       }
     },
     {
-      "name": "TComms Open (10%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/tcomms_open-0.webp",
+      "name": "Containerroom Xenos (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/containerroom_xenos-0.webp",
       "position": {
-        "x": 8,
-        "y": 49
+        "x": 36,
+        "y": 66
+      }
+    },
+    {
+      "name": "Crashlanding Eva (20%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/crashlanding-eva-0.webp",
+      "position": {
+        "x": 129,
+        "y": 69
+      },
+      "offset": {
+        "x": -9,
+        "y": -2
+      }
+    },
+    {
+      "name": "Crashlanding Offices (20%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/crashlanding-offices-0.webp",
+      "position": {
+        "x": 111,
+        "y": 112
+      }
+    },
+    {
+      "name": "Dorms Party (40%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/dorms_party-0.webp",
+      "position": {
+        "x": 97,
+        "y": 63
       }
     },
     {
@@ -249,19 +281,35 @@
       }
     },
     {
-      "name": "Virology Open (40%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/viro_open-0.webp",
+      "name": "Filtration Restored (35%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/filtration_restored-0.webp",
       "position": {
-        "x": 14,
-        "y": 78
+        "x": 109,
+        "y": 143
       }
     },
     {
-      "name": "Virology Rocks Open (30%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/viro-rock_open-0.webp",
+      "name": "Lambda Cave Extratunnel (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/lambda-cave_extratunnel-0.webp",
       "position": {
-        "x": 32,
-        "y": 86
+        "x": 182,
+        "y": 89
+      }
+    },
+    {
+      "name": "Lambda Cave Mushrooms (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/lambda-cave_mushroom-0.webp",
+      "position": {
+        "x": 204,
+        "y": 54
+      }
+    },
+    {
+      "name": "Lambda Graveyard (50%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/lambda_graveyard-0.webp",
+      "position": {
+        "x": 148,
+        "y": 110
       }
     },
     {
@@ -270,6 +318,14 @@
       "position": {
         "x": 51,
         "y": 26
+      }
+    },
+    {
+      "name": "LZ1 Containers Scramble (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/lz1containers_scramble-0.webp",
+      "position": {
+        "x": 33,
+        "y": 29
       }
     },
     {
@@ -289,83 +345,19 @@
       }
     },
     {
-      "name": "Lambda Graveyard (50%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/lambda_graveyard-0.webp",
+      "name": "Medbay (13%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/medbay-v3-0.webp",
       "position": {
-        "x": 148,
-        "y": 110
+        "x": 55,
+        "y": 74
       }
     },
     {
-      "name": "Dorms Party (40%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/dorms_party-0.webp",
+      "name": "Medbay Passage (37%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/medbay-passage-0.webp",
       "position": {
-        "x": 97,
-        "y": 63
-      }
-    },
-    {
-      "name": "Admin PMC (40%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/admin_pmc-0.webp",
-      "position": {
-        "x": 74,
-        "y": 100
-      }
-    },
-    {
-      "name": "Filtration Restored (35%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/filtration_restored-0.webp",
-      "position": {
-        "x": 109,
-        "y": 143
-      }
-    },
-    {
-      "name": "Vault (25%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/vault_v2-0.webp",
-      "position": {
-        "x": 190,
-        "y": 62
-      }
-    },
-    {
-      "name": "CLF Mining (10%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/clfmining-0.webp",
-      "position": {
-        "x": 15,
-        "y": 200
-      }
-    },
-    {
-      "name": "Crashlanding Offices (20%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/crashlanding-offices-0.webp",
-      "position": {
-        "x": 111,
-        "y": 112
-      }
-    },
-    {
-      "name": "Chapel Cult (25%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/chapel_cult-0.webp",
-      "position": {
-        "x": 148,
-        "y": 100
-      }
-    },
-    {
-      "name": "Lambda Cave Mushrooms",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/lambda-cave_mushroom-0.webp",
-      "position": {
-        "x": 204,
-        "y": 54
-      }
-    },
-    {
-      "name": "Cargo Containers (30%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/cargo_containers-0.webp",
-      "position": {
-        "x": 47,
-        "y": 118
+        "x": 76,
+        "y": 78
       }
     },
     {
@@ -377,23 +369,51 @@
       }
     },
     {
-      "name": "LZ1 Containers Scramble (25%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/lz1containers_scramble-0.webp",
+      "name": "SE Checkpoint (70%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/se-checkpoint-0.webp",
       "position": {
-        "x": 33,
-        "y": 29
+        "x": 134,
+        "y": 130
       }
     },
     {
-      "name": "Crashlanding Eva (20%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/crashlanding-eva-0.webp",
+      "name": "Together Surv Spawn (20%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/surv_spawn_admin-0.webp",
       "position": {
-        "x": 129,
-        "y": 69
-      },
-      "offset": {
-        "x": -9,
-        "y": -2
+        "x": 74,
+        "y": 84
+      }
+    },
+    {
+      "name": "TComms Open (10%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/tcomms_open-0.webp",
+      "position": {
+        "x": 8,
+        "y": 49
+      }
+    },
+    {
+      "name": "Vault (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/vault_v2-0.webp",
+      "position": {
+        "x": 190,
+        "y": 62
+      }
+    },
+    {
+      "name": "Virology Open (40%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/viro_open-0.webp",
+      "position": {
+        "x": 14,
+        "y": 78
+      }
+    },
+    {
+      "name": "Virology Rocks Open (30%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Solaris/viro-rock_open-0.webp",
+      "position": {
+        "x": 32,
+        "y": 86
       }
     }
   ]

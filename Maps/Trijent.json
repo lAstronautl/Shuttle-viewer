@@ -221,19 +221,19 @@
   ],
   "inserts": [
     {
-      "name": "Green River New Bridge (10%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/green_river_new_bridge-0.webp",
+      "name": "Admin Fight (30%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/admin_fight-0.webp",
       "position": {
-        "x": 183,
-        "y": 110
+        "x": 64,
+        "y": 30
       }
     },
     {
-      "name": "Purple River New Bridge (10%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/purple_river_new_bridge-0.webp",
+      "name": "Pristine/battle Armory (10%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/pristine-0.webp",
       "position": {
-        "x": 131,
-        "y": 170
+        "x": 49,
+        "y": 152
       }
     },
     {
@@ -242,22 +242,6 @@
       "position": {
         "x": 86,
         "y": 118
-      }
-    },
-    {
-      "name": "Temple Intact (10%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/temple_intact-0.webp",
-      "position": {
-        "x": 217,
-        "y": 94
-      }
-    },
-    {
-      "name": "Ship Gone (15%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/ship_gone-0.webp",
-      "position": {
-        "x": 21,
-        "y": 68
       }
     },
     {
@@ -273,7 +257,27 @@
       }
     },
     {
-      "name": "Crashlanding Bar (40%)",
+      "name": "CMB dead engi (30%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/cmb_engi-0.webp",
+      "position": {
+        "x": 85,
+        "y": 76
+      }
+    },
+    {
+      "name": "Crashlanding SPP Alt (40%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/crashlanding-spp-alt-0.webp",
+      "position": {
+        "x": 159,
+        "y": 164
+      },
+      "offset": {
+          "x": 0,
+          "y": 26
+      }
+    },
+    {
+      "name": "Crashlanding SPP Bar (40%)",
       "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/crashlanding-spp-bar-0.webp",
       "position": {
         "x": 69,
@@ -285,11 +289,115 @@
       }
     },
     {
+      "name": "Engineer Central Repaired (70%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/engi_central_repaired-0.webp",
+      "position": {
+        "x": 70,
+        "y": 90
+      }
+    },
+    {
+      "name": "Green River New Bridge (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/green_river_new_bridge-0.webp",
+      "position": {
+        "x": 183,
+        "y": 110
+      }
+    },
+    {
+      "name": "Hold Genwest (30%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/hold_genwest-0.webp",
+      "position": {
+        "x": 103,
+        "y": 88
+      }
+    },
+    {
+      "name": "Hydro Breakroom Hold (30%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/hydro_breakroom_hold-0.webp",
+      "position": {
+        "x": 105,
+        "y": 166
+      }
+    },
+    {
+      "name": "Loader dude (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/loaderdude-0.webp",
+      "position": {
+        "x": 97,
+        "y": 13
+      }
+    },
+    {
+      "name": "Metal Geneast (30%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/metal_geneast-0.webp",
+      "position": {
+        "x": 139,
+        "y": 83
+      }
+    },
+    {
       "name": "Minievac West Research (20%)",
       "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/minievac_westresearch-0.webp",
       "position": {
         "x": 124,
         "y": 37
+      }
+    },
+    {
+      "name": "Purple River New Bridge (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/purple_river_new_bridge-0.webp",
+      "position": {
+        "x": 131,
+        "y": 170
+      }
+    },
+    {
+      "name": "Sensor Hold (50%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/sensorhold-0.webp",
+      "position": {
+        "x": 199,
+        "y": 91
+      }
+    },
+    {
+      "name": "Ship Gone (15%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/ship_gone-0.webp",
+      "position": {
+        "x": 21,
+        "y": 68
+      }
+    },
+    {
+      "name": "Civ/Corp Hold Southbridge (10%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/corphold-0.webp",
+      "position": {
+        "x": 152,
+        "y": 118
+      }
+    },
+    {
+      "name": "Together Surv Spawn (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/surv_spawn_bar-0.webp",
+      "position": {
+        "x": 72,
+        "y": 136
+      }
+    },
+    {
+      "name": "Temple Intact (10%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/temple_intact-0.webp",
+      "position": {
+        "x": 217,
+        "y": 94
+      }
+    },
+    {
+      "name": "Gear/Guns workshop (10%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Trijent/gear-0.webp",
+      "position": {
+        "x": 21,
+        "y": 92
       }
     }
   ]

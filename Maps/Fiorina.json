@@ -197,19 +197,47 @@
   ],
   "inserts": [
     {
-      "name": "Pod holder (10%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Fiorina/podholder-0.webp",
+      "name": "Birthday Party (15%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Fiorina/birthday_party-0.webp",
       "position": {
-        "x": 113,
-        "y": 67
+        "x": 206,
+        "y": 95
       }
     },
     {
-      "name": "Rocinante",
+      "name": "Armory No Gear (15%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Fiorina/nogear-0.webp",
+      "position": {
+        "x": 135,
+        "y": 156
+      }
+    },
+    {
+      "name": "Riot In Progress",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Fiorina/riot_in_progress-0.webp",
+      "position": {
+        "x": 135,
+        "y": 142
+      },
+      "offset": {
+        "x": 0,
+        "y": 25
+      }
+    },
+    {
+      "name": "Rocinante - CLF",
       "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Fiorina/rocinante-0.webp",
       "position": {
         "x": 69,
         "y": 192
+      }
+    },
+    {
+      "name": "Together Surv Spawn (20%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Fiorina/surv_spawn_lowsec-0.webp",
+      "position": {
+        "x": 153,
+        "y": 125
       }
     }
   ]

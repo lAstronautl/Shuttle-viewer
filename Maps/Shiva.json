@@ -213,11 +213,15 @@
   ],
   "inserts": [
     {
-      "name": "LZ2 South Caves (30%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Shiva/builtup_lz2-south-caves-0.webp",
+      "name": "CLF Raid",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Shiva/clf_raid_shivas-0.webp",
       "position": {
-        "x": 3,
-        "y": 49
+        "x": 96,
+        "y": 96
+      },
+      "offset": {
+        "x": -1,
+        "y": 0
       }
     },
     {
@@ -229,15 +233,19 @@
       }
     },
     {
-      "name": "CLF Raid",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Shiva/clf_raid_shivas-0.webp",
+      "name": "LZ2 South Caves (30%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Shiva/builtup_lz2-south-caves-0.webp",
       "position": {
-        "x": 96,
-        "y": 96
-      },
-      "offset": {
-        "x": -1,
-        "y": 0
+        "x": 3,
+        "y": 49
+      }
+    },
+    {
+      "name": "Together Surv Spawn (20%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Shiva/surv_spawn_church-0.webp",
+      "position": {
+        "x": 113,
+        "y": 30
       }
     }
   ]

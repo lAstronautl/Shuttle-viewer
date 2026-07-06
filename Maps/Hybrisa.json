@@ -258,5 +258,47 @@
         "y": 40
       }
     }
+  ],
+  "inserts": [
+    {
+      "name": "CLF Spaceport",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Hybrisa/clf_spaceport-0.webp",
+      "position": {
+        "x": 29,
+        "y": 23
+      },
+      "offset": {
+          "x": -12,
+          "y": 0
+      }
+    },
+    {
+      "name": "Survivor Spawns (33%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Hybrisa/surv_spawn_apartments-0.webp",
+      "position": {
+        "x": 104,
+        "y": 81
+      }
+    },
+    {
+      "name": "TSE Airbase",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Hybrisa/tse_airbase_survivors-0.webp",
+      "position": {
+        "x": 57,
+        "y": 59
+      }
+    },
+    {
+      "name": "TSE Airbase Intact (28%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Hybrisa/tse_airbase-0.webp",
+      "position": {
+        "x": 57,
+        "y": 60
+      },
+      "offset": {
+          "x": 0,
+          "y": -1
+      }
+    }
   ]
 }

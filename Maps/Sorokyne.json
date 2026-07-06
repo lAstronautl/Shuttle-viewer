@@ -265,7 +265,15 @@
   ],
   "inserts": [
     {
-      "name": "CLF Camp (10%)",
+      "name": "Flamer Bodypile (60%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Sorokyne/flamer_bodypile-0.webp",
+      "position": {
+        "x": 87,
+        "y": 65
+      }
+    },
+    {
+      "name": "CLF Camp (50%)",
       "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Sorokyne/clfcamp-0.webp",
       "position": {
         "x": 146,
@@ -273,11 +281,27 @@
       }
     },
     {
-      "name": "Flamer Bodypile (60%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Sorokyne/flamer_bodypile-0.webp",
+      "name": "SPP SOF Dropship",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Sorokyne/spp_sof-0.webp",
       "position": {
-        "x": 87,
-        "y": 65
+        "x": 137,
+        "y": 104
+      }
+    },
+    {
+      "name": "SPP SOF Supply Ship",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Sorokyne/spp_sof_alt-0.webp",
+      "position": {
+        "x": 9,
+        "y": 128
+      }
+    },
+    {
+      "name": "Together Surv Spawn (34%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Sorokyne/surv_spawn_security-0.webp",
+      "position": {
+        "x": 132,
+        "y": 58
       }
     }
   ]

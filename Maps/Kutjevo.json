@@ -173,6 +173,22 @@
   ],
   "inserts": [
     {
+      "name": "Cleaning Botany (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Kutjevo/cleaningprog_botany-0.webp",
+      "position": {
+        "x": 108,
+        "y": 107
+      }
+    },
+    {
+      "name": "CLF Smugglers (10%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Kutjevo/clfsmugglers-0.webp",
+      "position": {
+        "x": 104,
+        "y": 163
+      }
+    },
+    {
       "name": "SE Checkpoint (35%)",
       "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Kutjevo/communications-0.webp",
       "position": {
@@ -181,11 +197,19 @@
       }
     },
     {
-      "name": "Cleaning Botany (25%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Kutjevo/cleaningprog_botany-0.webp",
+      "name": "LZ1 Alternative (60%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Kutjevo/lz1alternative-0.webp",
       "position": {
-        "x": 108,
-        "y": 107
+        "x": 0,
+        "y": 160
+      }
+    },
+    {
+      "name": "Together Surv Spawn (20%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Kutjevo/surv_spawn_bar-0.webp",
+      "position": {
+        "x": 119,
+        "y": 51
       }
     },
     {
@@ -202,22 +226,6 @@
       "position": {
         "x": 63,
         "y": 68
-      }
-    },
-    {
-      "name": "CLF Smugglers (10%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Kutjevo/clfsmugglers-0.webp",
-      "position": {
-        "x": 104,
-        "y": 163
-      }
-    },
-    {
-      "name": "LZ1 Alternative (60%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Kutjevo/lz1alternative-0.webp",
-      "position": {
-        "x": 0,
-        "y": 160
       }
     }
   ]

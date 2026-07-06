@@ -202,5 +202,47 @@
         "y": 159
       }
     }
+  ],
+  "inserts": [
+    {
+      "name": "Alt. Hospital (50%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Varadero/varadero_alt_hospital-0.webp",
+      "position": {
+        "x": 46,
+        "y": 95
+      }
+    },
+    {
+      "name": "CLF Raid (100%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Varadero/clf_raid-0.webp",
+      "position": {
+        "x": 8,
+        "y": 113
+      }
+    },
+    {
+      "name": "Engi Hold (33%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Varadero/engi_hold-0.webp",
+      "position": {
+        "x": 46,
+        "y": 111
+      }
+    },
+    {
+      "name": "Resturant (33%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Varadero/varadero_resturant-0.webp",
+      "position": {
+        "x": 84,
+        "y": 73
+      }
+    },
+    {
+      "name": "Together Surv Spawn (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/Varadero/surv_spawn_dorms-0.webp",
+      "position": {
+        "x": 88,
+        "y": 111
+      }
+    }
   ]
 }

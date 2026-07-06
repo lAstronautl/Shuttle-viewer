@@ -189,51 +189,11 @@
       }
     },
     {
-      "name": "Corporate Dome (10%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/corporate_dome-0.webp",
+      "name": "Bridge East (10%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/bridge_east-0.webp",
       "position": {
-        "x": 44,
-        "y": 205
-      },
-      "offset": {
-        "x": 2,
-        "y": -3
-      }
-    },
-    {
-      "name": "Gym (30%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/gym_alternate-0.webp",
-      "position": {
-        "x": 85,
-        "y": 173
-      },
-      "offset": {
-        "x": 1,
-        "y": 0
-      }
-    },
-    {
-      "name": "Nexus Barricaded (30%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/nexuscenter_barricaded-0.webp",
-      "position": {
-        "x": 110,
-        "y": 197
-      }
-    },
-    {
-      "name": "Sandtemple LZ1 (25%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/sandtemple-se-0.webp",
-      "position": {
-        "x": 158,
-        "y": 218
-      }
-    },
-    {
-      "name": "Sandtemple Jungle (25%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/sandtemple-jungle-0.webp",
-      "position": {
-        "x": 2,
-        "y": 218
+        "x": 77,
+        "y": 138
       }
     },
     {
@@ -261,19 +221,51 @@
       }
     },
     {
+      "name": "Central Caves (10%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/centralcaves_T-0.webp",
+      "position": {
+        "x": 73,
+        "y": 96
+      }
+    },
+    {
+      "name": "CLF ship",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/clf_ship-0.webp",
+      "position": {
+        "x": 6,
+        "y": 150
+      }
+    },
+    {
+      "name": "Corporate Dome (10%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/corporate_dome-0.webp",
+      "position": {
+        "x": 44,
+        "y": 205
+      },
+      "offset": {
+        "x": 2,
+        "y": -3
+      }
+    },
+    {
+      "name": "Gym (30%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/gym_alternate-0.webp",
+      "position": {
+        "x": 85,
+        "y": 173
+      },
+      "offset": {
+        "x": 1,
+        "y": 0
+      }
+    },
+    {
       "name": "Hydro Destroyed (30%)",
       "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/hydro_destroyed-0.webp",
       "position": {
         "x": 89,
         "y": 155
-      }
-    },
-    {
-      "name": "Cental Caves (10%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/centralcaves_T-0.webp",
-      "position": {
-        "x": 73,
-        "y": 96
       }
     },
     {
@@ -289,11 +281,47 @@
       }
     },
     {
-      "name": "Bridge East (10%)",
-      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/bridge_east-0.webp",
+      "name": "Nexus Barricaded (30%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/nexuscenter_barricaded-0.webp",
       "position": {
-        "x": 77,
-        "y": 138
+        "x": 110,
+        "y": 197
+      }
+    },
+    {
+      "name": "Sand Temple intact/flooded (10%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/maintemple_intact-0.webp",
+      "position": {
+        "x": 128,
+        "y": 115
+      },
+      "offset": {
+          "x": 0,
+          "y": 10
+      }
+    },
+    {
+      "name": "Sandtemple Jungle (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/sandtemple-jungle-0.webp",
+      "position": {
+        "x": 2,
+        "y": 218
+      }
+    },
+    {
+      "name": "Sandtemple LZ1 (25%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/sandtemple-se-0.webp",
+      "position": {
+        "x": 158,
+        "y": 218
+      }
+    },
+    {
+      "name": "Together Surv Spawn (50%)",
+      "url": "https://raw.githubusercontent.com/Tunguso4ka/rmc14_maps/refs/heads/master/Inserts/LV624/surv_spawn_powerplant-0.webp",
+      "position": {
+        "x": 85,
+        "y": 208
       }
     }
   ]
