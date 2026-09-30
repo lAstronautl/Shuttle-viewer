@@ -618,7 +618,7 @@ function update_area_info(event_location)
     if (!_prot)
         return;
 
-    let _names = ["CAS", "Fulton", "Lasing", "Mortar Place", "Mortar Fire", "Medevac", "OB", "Supply"];
+    let _names = ["CAS", "Fulton", "Lasing", "Mortar Place", "Mortar Fire", "Medevac", "OB", "Supply", "Paradropping"];
     for (let i = 0; i < _prot.length; i++)
         area_info_label.textContent += `\n ${ (_prot[i] == 1) ? "🟢" : "🔴"} ${_names[i]} `;
 

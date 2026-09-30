@@ -2,501 +2,501 @@
     "points": {
         "01": {
             "name": "Unknown Area",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "02": {
             "name": "CORSAT Administration Center",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "03": {
             "name": "Gamma Dome Control Module",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "04": {
             "name": "Gamma Dome North Airlock",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "05": {
             "name": "Gamma North ID Checkpoint",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "06": {
             "name": "Gamma Dome South Airlock",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "07": {
             "name": "Gamma South ID Checkpoint",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "08": {
             "name": "Biodome Gamma",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "09": {
             "name": "Gamma Research Complex",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "0a": {
             "name": "Gamma Toxins Wing",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "0b": {
             "name": "Gamma Virology Wing",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "0c": {
             "name": "CORSAT Canteen",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "0d": {
             "name": "Gamma Cargo",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "0e": {
             "name": "Gamma Disposals",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "0f": {
             "name": "Gamma Cargo Lobby",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "10": {
             "name": "Gamma Engineering",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "11": {
             "name": "CORSAT Atmospherics",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "12": {
             "name": "CORSAT Generator Core",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "13": {
             "name": "Gamma Engineering Lobby",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "14": {
             "name": "Gamma Foyer",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "15": {
             "name": "CORSAT Food Storage",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "16": {
             "name": "Gamma Sector South Hallways",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "17": {
             "name": "Landing Bay Gamma",
-            "protections": "11111111",
+            "protections": "111111111",
             "weedkiller": "LZ1"
         },
         "18": {
             "name": "Gamma Arrivals",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "19": {
             "name": "Gamma Hangar Cargo Checkpoint",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "1a": {
             "name": "Gamma Hangar Checkpoint",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "1b": {
             "name": "CORSAT Flight Control Center",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "1c": {
             "name": "Gamma Monorail Station",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "1d": {
             "name": "Gamma Monorail Control",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "1e": {
             "name": "CORSAT Railcart",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "1f": {
             "name": "Gamma Hangar Office",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "20": {
             "name": "Gamma Hangar Security",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "21": {
             "name": "CORSAT Hydroponics",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "22": {
             "name": "CORSAT Kitchen",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "23": {
             "name": "CORSAT Medbay",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "24": {
             "name": "CORSAT Chemistry",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "25": {
             "name": "CORSAT Medbay Lobby",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "26": {
             "name": "CORSAT Morgue",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "27": {
             "name": "CORSAT Surgery",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "28": {
             "name": "Gamma Residential Hallway",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "29": {
             "name": "Gamma North Residential",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "2a": {
             "name": "Gamma Laundry",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "2b": {
             "name": "Gamma Lavatory",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "2c": {
             "name": "Researcher Lounge",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "2d": {
             "name": "Gamma Residential Maintenance",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "2e": {
             "name": "Researcher Quarters",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "2f": {
             "name": "Gamma Showers",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "30": {
             "name": "CORSAT Academy",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "31": {
             "name": "CORSAT R&R",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "32": {
             "name": "CORSAT Arcade",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "33": {
             "name": "CORSAT Bar",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "34": {
             "name": "CORSAT Library",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "35": {
             "name": "CORSAT Security Hub",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "36": {
             "name": "CORSAT Armory",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "37": {
             "name": "CORSAT Security Cells",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "38": {
             "name": "Sigma Remote Complex",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "39": {
             "name": "Sigma Remote Teleporter",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "3a": {
             "name": "Unknown Location",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "3b": {
             "name": "LZ1 'Gamma'",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "3c": {
             "name": "Omega Dome North Airlock",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "3d": {
             "name": "Omega North ID Checkpoint",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "3e": {
             "name": "Biodome Omega",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "3f": {
             "name": "Omega Cargo",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "40": {
             "name": "Omega Access Checkpoint",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "41": {
             "name": "Omega Research Complex",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "42": {
             "name": "Omega Research Containment",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "43": {
             "name": "Omega Dome Control Module",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "44": {
             "name": "Omega Sector Hallways",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "45": {
             "name": "Landing Bay Omega",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "46": {
             "name": "Omega Hangar Office",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "47": {
             "name": "Omega Hangar Security",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "48": {
             "name": "Omega Maintenance",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "49": {
             "name": "Omega Offices",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "4a": {
             "name": "Omega Security Hub",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "4b": {
             "name": "Sigma Dome Control Module",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "4c": {
             "name": "Sigma Dome East Airlock",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "4d": {
             "name": "Sigma East ID Checkpoint",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "4e": {
             "name": "Sigma Dome South Airlock",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "4f": {
             "name": "Sigma South ID Checkpoint",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "50": {
             "name": "Biodome Sigma",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "51": {
             "name": "Sigma Biodome Firing Range",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "52": {
             "name": "Sigma Biodome Scrapyard",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "53": {
             "name": "Sigma Biodome Testing Grounds",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "54": {
             "name": "Sigma Cafe",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "55": {
             "name": "Sigma Cargo",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "56": {
             "name": "Sigma Security Checkpoint",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "57": {
             "name": "Sigma Residential Module",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "58": {
             "name": "Landing Bay Sigma",
-            "protections": "11111111",
+            "protections": "111111111",
             "weedkiller": "LZ2"
         },
         "59": {
             "name": "Sigma Arrivals",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "5a": {
             "name": "Sigma Hangar Checkpoint",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "5b": {
             "name": "Sigma Hangar ID Checkpoint",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "5c": {
             "name": "Sigma Monorail Station",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "5d": {
             "name": "Sigma Monorail Control",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "5e": {
             "name": "CORSAT Monorail",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "5f": {
             "name": "CORSAT Monorail transit",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "60": {
             "name": "Sigma Hangar Office",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "61": {
             "name": "Sigma Hangar Security",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "62": {
             "name": "Sigma Laundry",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "63": {
             "name": "Sigma Lavatory",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "64": {
             "name": "Sigma Sector North Hallway",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "65": {
             "name": "Sigma Sector South Hallways",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "66": {
             "name": "Sigma Research Complex",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "67": {
             "name": "Sigma Teleporter",
-            "protections": "11001011"
+            "protections": "110010111"
         },
         "68": {
             "name": "Sigma Engineering",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "69": {
             "name": "Sigma Offices",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "6a": {
             "name": "Sigma Robotics Laboratory",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "6b": {
             "name": "Sigma Security Hub",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "6c": {
             "name": "Sigma Sector Southeast Hallways",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "6d": {
             "name": "Sigma Data Laboratory",
-            "protections": "11001011"
+            "protections": "110010111"
         },
         "6e": {
             "name": "Sigma Data Maintenance",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "6f": {
             "name": "Sigma Data Office",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "70": {
             "name": "CORSAT Secondary Generators",
-            "protections": "11001011"
+            "protections": "110010111"
         },
         "71": {
             "name": "CORSAT Telecommunications",
-            "protections": "11001011"
+            "protections": "110010111"
         },
         "72": {
             "name": "Theta Dome Control Module",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "73": {
             "name": "Theta Dome East Airlock",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "74": {
             "name": "Theta East ID Checkpoint",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "75": {
             "name": "Theta Dome West Airlock",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "76": {
             "name": "Theta West ID Checkpoint",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "77": {
             "name": "Biodome Theta",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "78": {
             "name": "Theta Research Complex",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "79": {
             "name": "Theta East Hydroponics Wing",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "7a": {
             "name": "Theta West Hydroponics Wing",
-            "protections": "11111111"
+            "protections": "111111111"
         },
         "7b": {
             "name": "Omega Hangar Corporate Shuttle",
-            "protections": "00000000"
+            "protections": "000000001"
         },
         "7c": {
             "name": "Space",
-            "protections": "11111111"
+            "protections": "111111111"
         }
     },
     "map": [
