@@ -35,7 +35,7 @@ body {
 
   color: var(--dark);
   border: 2px solid var(--light);
-  border-radius: 0 6px 6px 6px;
+  border-radius: 16px;
   font-size: 24px;
 
   cursor: pointer;
@@ -43,9 +43,9 @@ body {
   min-width: 48px;
   min-height: 48px;
   padding: 0.2em;
-  margin: 1px;
+  margin: 2px;
   
-  background-image: linear-gradient(to bottom right, var(--light_trans), #81ADC8);
+  background-image: linear-gradient(to bottom, var(--light_trans), #81ADC8);
 }
 
 #maplist button {
@@ -68,7 +68,7 @@ body {
   height: 32px;
   background-color: transparent;
   border: none;
-  border-radius: 0 3px 3px 3px;
+  border-radius: 3px;
   position: absolute;
 }
 
@@ -136,7 +136,7 @@ html {
   flex-direction: column;
   background: var(--dark_trans);
   padding: 4px;
-  border-radius: 0px 8px 8px 8px;
+  border-radius: 16px;
   backdrop-filter: blur(24px);
 }
 
@@ -145,7 +145,7 @@ html {
   overflow-x: hidden;
   transition-duration: 0.4s;
   margin: 4px 0 0 0;
-  border-radius: 0 6px 6px 6px;
+  border-radius: 16px;
 }
 
 #maplist[hidden] {
@@ -158,7 +158,7 @@ html {
   color: var(--light);
   border: 2px solid var(--dark_trans);
   padding: 6px;
-  border-radius: 0px 8px 8px 8px;
+  border-radius: 16px;
   position: absolute;
   pointer-events: none;
   white-space: pre;

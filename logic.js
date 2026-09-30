@@ -618,9 +618,9 @@ function update_area_info(event_location)
     if (!_prot)
         return;
 
-    area_info_label.textContent += `\n CAS: ${ (_prot[0] == 1) ? "✅" : "❌"} | Fulton: ${ (_prot[1] == 1) ? "✅" : "❌"} | Lasing: ${ (_prot[2] == 1) ? "✅" : "❌"}\n`;
-    area_info_label.textContent += ` MortarPlace: ${ (_prot[3] == 1) ? "✅" : "❌"} | MortarFire: ${ (_prot[4] == 1) ? "✅" : "❌"}\n`;
-    area_info_label.textContent += ` Medevac: ${ (_prot[5] == 1) ? "✅" : "❌"} | OB: ${ (_prot[6] == 1) ? "✅" : "❌"} | SupplyDrop: ${ (_prot[7] == 1) ? "✅" : "❌"}`;
+    let _names = ["CAS", "Fulton", "Lasing", "Mortar Place", "Mortar Fire", "Medevac", "OB", "Supply"];
+    for (let i = 0; i < _prot.length; i++)
+        area_info_label.textContent += `\n ${ (_prot[i] == 1) ? "🟢" : "🔴"} ${_names[i]} `;
 
     // Don't proceed if no weedkiller
     var _weed = _id in image.areas.points && "weedkiller" in image.areas.points[_id] ? image.areas.points[_id].weedkiller : "";
