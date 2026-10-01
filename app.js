@@ -48,7 +48,7 @@ function fillMulti(id, anyLabel, values, allChecked = false) {
 }
 
 // price: dual slider + number fields, from the cheapest to the most expensive shuttle
-const price = { min: 0, max: 0, lo: 0, hi: 0 };
+const price = { min: 0, max: 0, lo: 0, hi: 0, sort: "asc" }; // sort: by price, ascending by default
 
 function setPrice(lo, hi, from) {
   price.lo = Math.max(price.min, Math.min(lo, price.max));
@@ -57,7 +57,10 @@ function setPrice(lo, hi, from) {
   $("rlo").value = price.lo; $("rhi").value = price.hi;
   $("pmin").value = price.lo; $("pmax").value = price.hi;
   const full = price.lo === price.min && price.hi === price.max;
-  $("price").querySelector("summary").textContent = full ? "Цена" : `Цена: ${price.lo.toLocaleString("ru-RU")} - ${price.hi.toLocaleString("ru-RU")}`;
+  const order = price.sort === "asc" ? "по возрастанию" : "по убыванию";
+  $("price").querySelector("summary").textContent = full ? `Цена, ${order}`
+    : `Цена ${price.lo.toLocaleString("ru-RU")} - ${price.hi.toLocaleString("ru-RU")}, ${order}`;
+  document.querySelectorAll("#price .seg button").forEach(b => b.classList.toggle("on", b.dataset.sort === price.sort));
   render();
 }
 
@@ -74,7 +77,8 @@ function initPrice() {
   $("rhi").oninput = () => setPrice(price.lo, +$("rhi").value, "hi");
   $("pmin").onchange = () => setPrice(parseInt($("pmin").value, 10) || price.min, price.hi, "lo");
   $("pmax").onchange = () => setPrice(price.lo, parseInt($("pmax").value, 10) || price.max, "hi");
-  $("preset").onclick = () => setPrice(price.min, price.max);
+  document.querySelectorAll("#price .seg button").forEach(b => b.onclick = () => { price.sort = b.dataset.sort; setPrice(price.lo, price.hi); });
+  $("preset").onclick = () => { price.sort = "asc"; setPrice(price.min, price.max); };
   setPrice(price.min, price.max);
 }
 
@@ -123,7 +127,7 @@ function card(s) {
 
   const tags = el("div", "tags");
   [s.category, s.group, ...s.class].filter(Boolean).forEach(t => tags.appendChild(el("span", "tag", t)));
-  s.engine.forEach(t => tags.appendChild(el("span", "tag fuel", "Топливо: " + t)));
+  s.engine.forEach(t => tags.appendChild(el("span", "tag fuel", t)));
 
   const body = el("div", "body");
   body.append(top, el("div", "desc", s.descriptionRu || s.description), tags);
@@ -140,9 +144,7 @@ function render() {
     multi.group.has(s.group) && (!cat || s.category === cat) &&
     [...multi.cls].every(x => s.class.includes(x)) &&
     [...multi.engine].every(x => s.engine.includes(x)));
-  const sort = $("sort").value;
-  list.sort(sort === "name" ? (a, b) => a.name.localeCompare(b.name)
-    : sort === "price-desc" ? (a, b) => b.price - a.price : (a, b) => a.price - b.price);
+  list.sort((a, b) => (price.sort === "desc" ? b.price - a.price : a.price - b.price) || a.name.localeCompare(b.name));
   $("grid").replaceChildren(...list.map(card));
 }
 
@@ -162,7 +164,7 @@ fetch("shuttles.json").then(r => r.json()).then(d => {
   fill("category", all.map(s => s.category));
   fillMulti("cls", "Любой класс", all.flatMap(s => s.class));
   fillMulti("engine", "Любой двигатель", all.flatMap(s => s.engine));
-  ["q", "category", "sort"].forEach(id => $(id).addEventListener("input", render));
+  ["q", "category"].forEach(id => $(id).addEventListener("input", render));
   initPrice(); // renders
   setMode(mode);
 });

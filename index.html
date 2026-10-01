@@ -26,6 +26,10 @@
     <details class="multi" id="price">
       <summary>Цена</summary>
       <div class="panel">
+        <div class="seg" role="group" aria-label="Сортировка по цене">
+          <button id="sortasc" type="button" data-sort="asc">По возрастанию</button>
+          <button id="sortdesc" type="button" data-sort="desc">По убыванию</button>
+        </div>
         <div class="range">
           <input id="rlo" type="range" aria-label="Цена от">
           <input id="rhi" type="range" aria-label="Цена до">
@@ -38,11 +42,6 @@
         <button id="preset" type="button">Сбросить</button>
       </div>
     </details>
-    <select id="sort">
-      <option value="price-asc">Цена по возрастанию</option>
-      <option value="price-desc">Цена по убыванию</option>
-      <option value="name">Название</option>
-    </select>
   </div>
 </header>
 <main id="grid"></main>

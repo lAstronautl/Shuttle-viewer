@@ -50,3 +50,11 @@ details.multi .panel{position:absolute;z-index:5;top:100%;left:0;margin-top:2px;
 .nums input{width:100%;min-width:0}
 #preset{align-self:flex-end;background:var(--card);color:var(--mut);border:1px solid var(--line);border-radius:4px;padding:4px 12px;font:inherit;cursor:pointer}
 #price .panel{left:auto;right:0;max-width:calc(100vw - 32px)}
+.seg{display:flex}
+.seg button{flex:1;background:var(--card);color:var(--mut);border:1px solid var(--line);padding:5px 8px;font:inherit;cursor:pointer}
+.seg button:first-child{border-radius:4px 0 0 4px}
+.seg button:last-child{border-radius:0 4px 4px 0;border-left:0}
+.seg button.on{color:var(--fg);background:#333;border-color:var(--mut)}
+#price summary{max-width:none}
+#price .panel{width:340px}
+.seg button{white-space:nowrap}
