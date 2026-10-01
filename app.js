@@ -1,6 +1,5 @@
 const $ = id => document.getElementById(id);
 const fmt = n => n.toLocaleString("ru-RU") + " $";
-const fname = s => s.name.replace(/[<>:"/\\|?*]/g, "_");
 let all = [];
 let mode = "render"; // "render" | "mini"; shared with the viewer through localStorage
 
@@ -12,6 +11,29 @@ function el(tag, cls, text) {
   if (text !== undefined) e.textContent = text;
   return e;
 }
+
+// multi-select dropdown (details + checkboxes): selected values match as "any of"
+const multi = { cls: new Set(), engine: new Set() };
+
+function fillMulti(id, anyLabel, values) {
+  const box = $(id), opts = box.querySelector(".opts"), sum = box.querySelector("summary");
+  [...new Set(values)].filter(Boolean).sort().forEach(v => {
+    const l = el("label", "opt");
+    const c = el("input");
+    c.type = "checkbox";
+    c.onchange = () => {
+      c.checked ? multi[id].add(v) : multi[id].delete(v);
+      sum.textContent = multi[id].size ? [...multi[id]].sort().join(", ") : anyLabel;
+      render();
+    };
+    l.append(c, document.createTextNode(" " + v));
+    opts.appendChild(l);
+  });
+}
+
+document.addEventListener("click", e => {
+  document.querySelectorAll("details.multi[open]").forEach(d => { if (!d.contains(e.target)) d.open = false; });
+});
 
 function fill(sel, values) {
   [...new Set(values)].filter(Boolean).sort().forEach(v => {
@@ -57,30 +79,26 @@ function card(s) {
   s.engine.forEach(t => tags.appendChild(el("span", "tag fuel", "Топливо: " + t)));
 
   const body = el("div", "body");
-  body.append(top, el("div", "desc", s.description), tags);
-  if (src) {
-    const dl = el("a", "dl", "Скачать");
-    dl.href = src;
-    dl.download = fname(s) + (src.endsWith(".png") ? " (mini).png" : ".webp");
-    dl.onclick = e => e.stopPropagation();
-    body.appendChild(dl);
-  }
+  body.append(top, el("div", "desc", s.descriptionRu || s.description), tags);
   c.append(img, body);
   return c;
 }
 
 function render() {
   const q = $("q").value.trim().toLowerCase();
-  const g = $("group").value, cat = $("category").value, cl = $("cls").value, en = $("engine").value;
+  const pmin = parseInt($("pmin").value, 10), pmax = parseInt($("pmax").value, 10);
+  const g = $("group").value, cat = $("category").value, withCustom = $("custom").checked;
   const list = all.filter(s =>
-    (!q || (s.name + " " + s.description).toLowerCase().includes(q)) &&
+    (!q || (s.name + " " + s.description + " " + (s.descriptionRu || "")).toLowerCase().includes(q)) &&
+    (isNaN(pmin) || s.price >= pmin) && (isNaN(pmax) || s.price <= pmax) &&
     (!g || s.group === g) && (!cat || s.category === cat) &&
-    (!cl || s.class.includes(cl)) && (!en || s.engine.includes(en)));
+    (withCustom || s.group !== "Custom") &&
+    (!multi.cls.size || s.class.some(x => multi.cls.has(x))) &&
+    (!multi.engine.size || s.engine.some(x => multi.engine.has(x))));
   const sort = $("sort").value;
   list.sort(sort === "name" ? (a, b) => a.name.localeCompare(b.name)
     : sort === "price-desc" ? (a, b) => b.price - a.price : (a, b) => a.price - b.price);
   $("grid").replaceChildren(...list.map(card));
-  $("count").textContent = `(${list.length}/${all.length})`;
 }
 
 function setMode(m) {
@@ -97,8 +115,8 @@ fetch("shuttles.json").then(r => r.json()).then(d => {
   $("updated").textContent = d.generated || "-";
   fill("group", all.map(s => s.group));
   fill("category", all.map(s => s.category));
-  fill("cls", all.flatMap(s => s.class));
-  fill("engine", all.flatMap(s => s.engine));
-  ["q", "group", "category", "cls", "engine", "sort"].forEach(id => $(id).addEventListener("input", render));
+  fillMulti("cls", "Любой класс", all.flatMap(s => s.class));
+  fillMulti("engine", "Любой двигатель", all.flatMap(s => s.engine));
+  ["q", "group", "category", "custom", "pmin", "pmax", "sort"].forEach(id => $(id).addEventListener("input", render));
   setMode(mode);
 });

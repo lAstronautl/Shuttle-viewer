@@ -125,30 +125,98 @@ stage.addEventListener("wheel", e => {
   e.preventDefault();
   zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.2 : 1 / 1.2);
 }, { passive: false });
-stage.addEventListener("dblclick", fit);
 
-// keyboard
+// keyboard: movement only on WASD; e.code is the physical key, so it works on any layout (e.g. Russian)
 const STEP = 75;
 document.addEventListener("keydown", e => {
-  const k = e.key, fast = k !== k.toLowerCase() && k.length === 1 && /[a-z]/i.test(k) ? 2 : 1;
-  const s = STEP * fast;
-  switch (k) {
-    case "-": case "_": zoomAt(innerWidth / 2, innerHeight / 2, 1 / 1.4); break;
-    case "=": case "+": zoomAt(innerWidth / 2, innerHeight / 2, 1.4); break;
-    case "h": case "H": case "a": case "A": case "ArrowLeft": pan(s, 0); break;
-    case "l": case "L": case "d": case "D": case "ArrowRight": pan(-s, 0); break;
-    case "k": case "K": case "w": case "W": case "ArrowUp": pan(0, s); break;
-    case "j": case "J": case "s": case "S": case "ArrowDown": pan(0, -s); break;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const s = STEP * (e.shiftKey ? 2 : 1);
+  switch (e.code) {
+    case "KeyA": pan(s, 0); break;
+    case "KeyD": pan(-s, 0); break;
+    case "KeyW": pan(0, s); break;
+    case "KeyS": pan(0, -s); break;
+    case "Minus": case "NumpadSubtract": zoomAt(innerWidth / 2, innerHeight / 2, 1 / 1.4); break;
+    case "Equal": case "NumpadAdd": zoomAt(innerWidth / 2, innerHeight / 2, 1.4); break;
     default: return;
   }
   e.preventDefault();
 });
+
+// download: the render and the mini map together in one zip (stored, no compression; no external libraries)
+const CRC = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1;
+    t[n] = c >>> 0;
+  }
+  return buf => {
+    let c = 0xFFFFFFFF;
+    for (let i = 0; i < buf.length; i++) c = t[(c ^ buf[i]) & 255] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  };
+})();
+
+function makeZip(files) { // files: [{name, data: Uint8Array}]
+  const enc = new TextEncoder();
+  const d = new Date();
+  const time = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1);
+  const date = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+  const parts = [], central = [];
+  let offset = 0;
+  for (const f of files) {
+    const name = enc.encode(f.name), crc = CRC(f.data);
+    const local = new DataView(new ArrayBuffer(30));
+    local.setUint32(0, 0x04034b50, true); local.setUint16(4, 20, true); local.setUint16(6, 0x0800, true);
+    local.setUint16(10, time, true); local.setUint16(12, date, true);
+    local.setUint32(14, crc, true); local.setUint32(18, f.data.length, true); local.setUint32(22, f.data.length, true);
+    local.setUint16(26, name.length, true);
+    parts.push(new Uint8Array(local.buffer), name, f.data);
+    const c = new DataView(new ArrayBuffer(46));
+    c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true);
+    c.setUint16(12, time, true); c.setUint16(14, date, true);
+    c.setUint32(16, crc, true); c.setUint32(20, f.data.length, true); c.setUint32(24, f.data.length, true);
+    c.setUint16(28, name.length, true); c.setUint32(42, offset, true);
+    central.push(new Uint8Array(c.buffer), name);
+    offset += 30 + name.length + f.data.length;
+  }
+  const cdSize = central.reduce((n, p) => n + p.length, 0);
+  const end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true);
+  end.setUint32(12, cdSize, true); end.setUint32(16, offset, true);
+  return new Blob([...parts, ...central, new Uint8Array(end.buffer)], { type: "application/zip" });
+}
+
+async function download() {
+  const m = maps[current];
+  if (!m) return;
+  const base = (m.name || current).replace(/[<>:"/\\|?*]/g, "_");
+  const btn = $("dl");
+  btn.disabled = true;
+  try {
+    const files = [];
+    for (const [url, name] of [[m.url, `Рендер/${base}.webp`], [m.mini, `Миникарта/${base} (mini).png`]]) {
+      if (!url) continue;
+      files.push({ name, data: new Uint8Array(await (await fetch(url)).arrayBuffer()) });
+    }
+    if (!files.length) return;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(makeZip(files));
+    a.download = base + ".zip";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  } finally {
+    btn.disabled = false;
+  }
+}
 
 // buttons
 $("toggle").onclick = () => { $("list").hidden = !$("list").hidden; };
 $("zin").onclick = () => zoomAt(innerWidth / 2, innerHeight / 2, 1.4);
 $("zout").onclick = () => zoomAt(innerWidth / 2, innerHeight / 2, 1 / 1.4);
 $("fit").onclick = fit;
+$("dl").onclick = download;
 document.querySelectorAll("#mode button").forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode)));
 addEventListener("resize", fit);
 addEventListener("popstate", () => load(new URLSearchParams(location.search).get("map")));

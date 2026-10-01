@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Shuttle Viewer</title>
+<title>StarHorizon Render</title>
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
   <div id="top">
-    <h1>Shuttle Viewer <small id="count"></small></h1>
+    <h1>StarHorizon Render</h1>
     <div id="mode" role="group" aria-label="Что показывать на карточках">
       <button type="button" data-mode="render">Рендер</button>
       <button type="button" data-mode="mini">Миникарта</button>
@@ -19,10 +19,13 @@
   </div>
   <div id="filters">
     <input id="q" type="search" placeholder="Поиск по названию, описанию...">
-    <select id="group"><option value="">Все магазины</option></select>
+    <select id="group"><option value="">Все верфи</option></select>
     <select id="category"><option value="">Любой размер</option></select>
-    <select id="cls"><option value="">Любой класс</option></select>
-    <select id="engine"><option value="">Любое топливо/двигатель</option></select>
+    <details class="multi" id="cls"><summary>Любой класс</summary><div class="opts"></div></details>
+    <details class="multi" id="engine"><summary>Любой двигатель</summary><div class="opts"></div></details>
+    <label class="chk"><input id="custom" type="checkbox" checked> Верфь Custom</label>
+    <input id="pmin" type="number" min="0" step="1000" inputmode="numeric" placeholder="Цена от">
+    <input id="pmax" type="number" min="0" step="1000" inputmode="numeric" placeholder="Цена до">
     <select id="sort">
       <option value="price-asc">Цена по возрастанию</option>
       <option value="price-desc">Цена по убыванию</option>

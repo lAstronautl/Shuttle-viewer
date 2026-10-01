@@ -4,7 +4,7 @@
 Usage: python scripts/export_renders.py <render-cache-dir> <out> [--only id_or_name,...] [--minimaps <dir-with-shuttles/mini>]
 
 <out> ending in .zip -> a zip archive, otherwise a directory. Files are named after the shuttle
-(`NT Vagabond.webp`); if two shuttles share a name the id is appended. Reads ./shuttles.json.
+(`Рендер/NT Vagabond.webp`, `Миникарта/NT Vagabond (mini).png`); if two shuttles share a name the id is appended. Reads ./shuttles.json.
 """
 import argparse, json, re, shutil, sys, zipfile
 from pathlib import Path
@@ -34,17 +34,17 @@ for s in shuttles:
     sha = s.get("mapSha")
     sources = []
     if sha and (cache / f"{sha}.webp").exists():
-        sources.append(("", cache / f"{sha}.webp", ".webp"))
+        sources.append(("Рендер/", "", cache / f"{sha}.webp", ".webp"))
     if a.minimaps and s.get("minimap") and (Path(a.minimaps) / s["minimap"]).exists():
-        sources.append((" (mini)", Path(a.minimaps) / s["minimap"], ".png"))
+        sources.append(("Миникарта/", " (mini)", Path(a.minimaps) / s["minimap"], ".png"))
     if not sources:
         continue
     base = safe(s["name"])
     if f"{base.lower()}" in used:
         base = f"{base} [{safe(s['id'])}]"
     used.add(base.lower())
-    for suffix, src, ext in sources:
-        entries.append((f"{base}{suffix}{ext}", src))
+    for folder, suffix, src, ext in sources:
+        entries.append((f"{folder}{base}{suffix}{ext}", src))
 
 if not entries:
     sys.exit("nothing to export (no matching renders)")
@@ -54,7 +54,8 @@ if a.out.endswith(".zip"):
         for name, src in entries:
             z.write(src, name)
 else:
-    Path(a.out).mkdir(parents=True, exist_ok=True)
     for name, src in entries:
-        shutil.copy(src, Path(a.out) / name)
+        dst = Path(a.out) / name
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(src, dst)
 print(f"exported {len(entries)} files to {a.out}")

@@ -18,7 +18,7 @@ n = 0
 for s in shuttles:
     if not (s.get("image") or s.get("minimap")):
         continue
-    conf["maps"].setdefault(f"Шаттлы: {s['group']}", {})[f"ship-{s['id']}"] = {
+    conf["maps"].setdefault(f"Верфь: {s['group']}", {})[f"ship-{s['id']}"] = {
         "name": s["name"],
         "url": "../" + s["image"] if s.get("image") else None,
         "mini": "../" + s["minimap"] if s.get("minimap") else None,
