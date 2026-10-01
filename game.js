@@ -1,13 +1,12 @@
 const $ = id => document.getElementById(id);
 
-const ROUNDS = 5;
 const MAX_W = 820, MAX_H = 560;       // canvas size limit, in css pixels
 const PX_MAX = 700, TIME_MAX = 300;   // points for few opened pixels / for speed
 const TIME_FULL = 90;                 // seconds after which the speed bonus is gone
 const WRONG = 75;                     // penalty for a wrong answer
 const HARD_MULT = 1.5;
 
-const prefs = { kind: "ship", diff: "easy", custom: false };
+const prefs = { kind: "ship", diff: "easy", custom: false, rounds: 5, random: false, lives: 1 };
 try { Object.assign(prefs, JSON.parse(localStorage.getItem("gamePrefs") || "{}")); } catch (e) { /* ignore */ }
 
 let data = null;
@@ -36,8 +35,8 @@ function isCorrect(guess, target, pool) {
 
 function pool() {
   const hard = prefs.diff === "hard";
-  const list = prefs.kind === "poi" ? data.pois : data.shuttles;
-  return list.filter(s => (hard ? s.minimap : s.image) && (prefs.kind === "poi" || prefs.custom || s.group !== "Custom"));
+  const list = prefs.kind === "poi" ? data.pois : prefs.kind === "all" ? [...data.shuttles, ...data.pois] : data.shuttles;
+  return list.filter(s => (hard ? s.minimap : s.image) && (s.kind === "poi" || prefs.custom || s.group !== "Custom"));
 }
 
 function bestKey() { return `gameBest:${prefs.kind}:${prefs.diff}`; }
@@ -50,9 +49,14 @@ function refreshSetup() {
   document.querySelectorAll("#s-diff button").forEach(b => b.classList.toggle("on", b.dataset.diff === prefs.diff));
   $("s-custom").checked = prefs.custom;
   $("s-custom-row").hidden = prefs.kind === "poi";
+  $("s-random").checked = prefs.random;
   const n = pool().length;
+  prefs.rounds = Math.max(1, Math.min(30, Math.floor(prefs.rounds) || 5));
+  $("s-rounds").value = prefs.rounds;
+  prefs.lives = Math.max(1, Math.min(10, Math.floor(prefs.lives) || 1));
+  $("s-lives").value = prefs.lives;
   $("s-info").textContent = n
-    ? `Доступно картинок в этом режиме: ${n}.`
+    ? `Доступно картинок в этом режиме: ${n}.` + (prefs.rounds > n ? ` Раундов будет ${n}: больше картинок нет.` : "")
     : "Для этого режима пока нет картинок (рендеры ещё не собраны).";
   const best = getBest();
   $("s-best").textContent = best ? `Ваш рекорд в этом режиме: ${best}.` : "";
@@ -66,6 +70,9 @@ function savePrefs() {
 
 document.querySelectorAll("#s-kind button").forEach(b => b.onclick = () => { prefs.kind = b.dataset.kind; savePrefs(); });
 document.querySelectorAll("#s-diff button").forEach(b => b.onclick = () => { prefs.diff = b.dataset.diff; savePrefs(); });
+$("s-random").onchange = e => { prefs.random = e.target.checked; savePrefs(); };
+$("s-lives").onchange = e => { prefs.lives = +e.target.value; savePrefs(); };
+$("s-rounds").onchange = e => { prefs.rounds = +e.target.value; savePrefs(); };
 $("s-custom").onchange = e => { prefs.custom = e.target.checked; savePrefs(); };
 
 /* ---------- game ---------- */
@@ -76,8 +83,8 @@ function show(id) {
 
 function startGame() {
   const items = pool();
-  const picked = [...items].sort(() => Math.random() - 0.5).slice(0, ROUNDS);
-  g = { items: picked, pool: items, i: 0, total: 0, log: [] };
+  const picked = [...items].sort(() => Math.random() - 0.5).slice(0, prefs.rounds);
+  g = { items: picked, pool: items, i: 0, total: 0, log: [], lives: prefs.lives };
   const names = [...new Set(items.map(s => s.name))].sort((a, b) => a.localeCompare(b));
   $("g-names").replaceChildren(...names.map(n => Object.assign(document.createElement("option"), { value: n })));
   show("play");
@@ -135,7 +142,7 @@ async function startRound() {
 
   const cv = $("cv");
   cv.width = cols * cell; cv.height = rows * cell;
-  cv.className = "";
+  cv.className = prefs.random ? "done" : "";
   r = {
     item, img, hard, cellSrc, cols, rows, cell, filled, filledCount: Math.max(1, filledCount),
     open: new Uint8Array(cols * rows), used: 0, wrong: 0, done: false, hover: -1,
@@ -173,7 +180,10 @@ function hud() {
   $("h-px").textContent = r.used;
   $("h-time").textContent = Math.floor(elapsed());
   $("h-score").textContent = g.total;
-  $("h-now").textContent = r.done ? 0 : calc().total;
+  $("h-lives").textContent = g.lives;
+  const now = r.done ? 0 : calc().total;
+  $("h-now").textContent = now;
+  if (!r.done && now <= 0) endRound(false, "Очки за раунд закончились.");
 }
 
 /* ---------- drawing ---------- */
@@ -237,12 +247,12 @@ function reveal(idx) {
 }
 
 $("cv").addEventListener("mousemove", e => {
-  if (!r || r.done) return;
+  if (!r || r.done || prefs.random) return;
   const idx = cellAt(e);
   if (idx !== r.hover) { r.hover = idx; draw(); }
 });
 $("cv").addEventListener("mouseleave", () => { if (r && !r.done && r.hover !== -1) { r.hover = -1; draw(); } });
-$("cv").addEventListener("click", e => reveal(cellAt(e)));
+$("cv").addEventListener("click", e => { if (!prefs.random) reveal(cellAt(e)); });
 
 $("g-random").onclick = () => {
   const left = [];
@@ -272,12 +282,15 @@ $("guess").addEventListener("submit", e => {
 
 $("g-giveup").onclick = () => { if (r && !r.done) endRound(false); };
 
-function endRound(won) {
+function endRound(won, reason) {
+  if (r.done) return;
   r.done = true;
   r.end = performance.now();
   clearInterval(startRound.timer);
   const c = calc();
   const pts = won ? c.total : 0;
+  if (!won) g.lives--;
+  const over = g.lives <= 0 || g.i + 1 >= g.items.length;
   g.total += pts;
   g.log.push({ name: r.item.name, pts });
   $("cv").className = "done";
@@ -285,22 +298,23 @@ function endRound(won) {
   hud();
   setControls(false);
 
-  const mark = r.item.kind || (prefs.kind === "poi" ? "poi" : "ship");
+  const mark = r.item.kind;
   $("r-title").textContent = (won ? "Верно: " : "Это был(а): ") + r.item.name;
   $("r-detail").textContent = won
     ? `Открыто пикселей: ${r.used} из ${r.filledCount} (${Math.round(c.pxPts)} оч.), время ${Math.round(elapsed())} с (${Math.round(c.timePts)} оч.), `
       + `ошибок: ${r.wrong} (минус ${c.penalty})${r.hard ? ", сложность x" + HARD_MULT : ""}. Итого за раунд: ${pts}.`
-    : "Раунд пропущен, очки не начислены.";
+    : (reason || "Вы сдались.") + " Очки за раунд не начислены, потеряна жизнь"
+      + (g.lives <= 0 ? ". Жизней не осталось - игра окончена." : `. Осталось жизней: ${g.lives}.`);
   $("g-msg").className = "note " + (won ? "good" : "bad");
-  $("g-msg").textContent = won ? `+${pts} очков` : "Сдались";
+  $("g-msg").textContent = won ? `+${pts} очков` : (reason || "Сдались");
   $("r-view").href = `viewer/?map=${mark}-${encodeURIComponent(r.item.id)}&view=${r.hard ? "mini" : "render"}`;
-  $("r-next").textContent = g.i + 1 < g.items.length ? "Дальше" : "Итоги";
+  $("r-next").textContent = over ? "Итоги" : "Дальше";
   $("result").hidden = false;
   $("r-next").focus();
 }
 
 $("r-next").onclick = () => {
-  if (g.i + 1 < g.items.length) {
+  if (g.lives > 0 && g.i + 1 < g.items.length) {
     g.i++;
     startRound();
   } else {

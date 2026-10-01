@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StarHorizon Render: сапёр</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="game.css">
+<link rel="stylesheet" href="mines.css">
+</head>
+<body class="game">
+<header>
+  <div id="top">
+    <h1>StarHorizon Render: сапёр</h1>
+    <a class="btn" href="game.html">Угадай карту</a>
+    <a class="btn" href="./">К каталогу</a>
+  </div>
+</header>
+
+<main id="gm">
+  <div class="row">
+    <span class="lbl">Сложность</span>
+    <div class="seg" id="m-preset">
+      <button type="button" data-p="easy">Новичок 9x9</button>
+      <button type="button" data-p="medium">Любитель 16x16</button>
+      <button type="button" data-p="hard">Эксперт 30x16</button>
+      <button type="button" data-p="custom">Своё</button>
+    </div>
+  </div>
+
+  <div class="row" id="m-custom" hidden>
+    <label>Ширина <input id="c-w" type="number" min="5" max="50" value="12"></label>
+    <label>Высота <input id="c-h" type="number" min="5" max="30" value="12"></label>
+    <label>Мин <input id="c-m" type="number" min="1" value="20"></label>
+  </div>
+
+  <div class="hud">
+    <span>Мин осталось <b id="m-left">0</b></span>
+    <span>Время <b id="m-time">0</b> с</span>
+    <span id="m-best"></span>
+    <span class="now"><button id="m-flagmode" type="button" aria-pressed="false">Режим флажка: выкл</button>
+    <button id="m-new" type="button" class="primary">Новая игра</button></span>
+  </div>
+
+  <div id="m-wrap"><div id="m-board" role="grid" aria-label="Игровое поле"></div></div>
+  <p id="m-msg" class="note" aria-live="polite"></p>
+  <p class="note">Левая кнопка: открыть. Правая кнопка (или долгое нажатие, или режим флажка): флажок. Клик по открытой цифре с нужным числом флажков открывает соседей. Первый клик всегда безопасный.</p>
+</main>
+
+<script src="mines.js"></script>
+</body>
+</html>

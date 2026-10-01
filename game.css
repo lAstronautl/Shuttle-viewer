@@ -41,3 +41,4 @@ button:disabled{opacity:.45;cursor:default}
 #f-list{list-style:none;padding:0;margin:16px auto;max-width:520px;text-align:left}
 #f-list li{display:flex;justify-content:space-between;gap:12px;padding:6px 10px;border-bottom:1px solid var(--line)}
 #f-list li span:last-child{font-variant-numeric:tabular-nums}
+[hidden]{display:none !important}

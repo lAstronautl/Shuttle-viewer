@@ -53,14 +53,17 @@ if todo:
         dst = stage / f"{sha}.yml"
         shutil.copy(src, dst)
         files.append(str(dst))
-    # Render in batches so one crash doesn't lose everything; finished renders are moved to the cache immediately.
     BATCH = int(os.environ.get("RENDER_BATCH", "10"))
-    for i in range(0, len(files), BATCH):
-        batch = files[i:i + BATCH]
+
+    def run(batch):
         r = subprocess.run([dotnet, "run", "--project", "Content.MapRenderer", "-c", "Release", "--no-build", "--",
                             "--format", "webp", "-o", str(renders), "-f", *batch], cwd=root)
         if r.returncode != 0:
-            print(f"renderer exited with {r.returncode} for batch {i // BATCH}", file=sys.stderr)
+            print(f"renderer exited with {r.returncode} for {len(batch)} map(s)", file=sys.stderr)
+
+    def collect(batch):
+        """Move finished renders to the cache; return the files that produced nothing."""
+        missing = []
         for f in batch:
             sha = Path(f).stem
             # a map may hold several grids (e.g. a POI with docked ships): keep the biggest one
@@ -68,7 +71,23 @@ if todo:
             if grids:
                 shutil.move(grids[0], cache / f"{sha}.webp")
             else:
-                print(f"::warning::render failed for {sha} ({todo[sha].name})", file=sys.stderr)
+                missing.append(f)
+        return missing
+
+    # Render in batches (one process start is slow). A crash of the renderer on one map kills the whole batch,
+    # so every map left without a result is retried alone: only a really broken map is reported as failed.
+    for i in range(0, len(files), BATCH):
+        batch = files[i:i + BATCH]
+        run(batch)
+        missing = collect(batch)
+        if len(batch) > 1:
+            for f in missing:
+                run([f])
+                for bad in collect([f]):
+                    print(f"::warning::render failed for {Path(bad).stem} ({todo[Path(bad).stem].name})", file=sys.stderr)
+        else:
+            for bad in missing:
+                print(f"::warning::render failed for {Path(bad).stem} ({todo[Path(bad).stem].name})", file=sys.stderr)
         print(f"batch {i // BATCH + 1}/{-(-len(files) // BATCH)} done", flush=True)
 
 # keep only renders that current shuttles/POI still reference, so the cache/artifact doesn't grow forever
