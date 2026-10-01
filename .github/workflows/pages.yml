@@ -41,7 +41,7 @@ jobs:
       - name: Fetch StarHorizon (only prototypes and the maps)
         run: |
           git clone --depth 1 --filter=blob:none --sparse https://github.com/StarHorizon14/StarHorizon.git ../StarHorizon
-          git -C ../StarHorizon sparse-checkout set Resources/Prototypes Resources/Maps
+          git -C ../StarHorizon sparse-checkout set Resources/Prototypes Resources/Maps Resources/Locale
 
       - name: Generate shuttles.json from vessel prototypes
         run: python scripts/build_shuttles.py ../StarHorizon .

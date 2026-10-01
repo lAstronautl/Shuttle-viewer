@@ -16,12 +16,13 @@ if img_out.exists():
     shutil.rmtree(img_out)
 img_out.mkdir(parents=True)
 
+items = data["shuttles"] + data.get("pois", [])
 n = 0
-for s in data["shuttles"]:
+for s in items:
     src = cache / f"{s.get('mapSha')}.webp"
     if "mapSha" in s and src.exists():
         shutil.copy(src, img_out / src.name)
         s["image"] = f"shuttles/img/{src.name}"
         n += 1
 (out / "shuttles.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
-print(f"{n}/{len(data['shuttles'])} shuttles have full renders")
+print(f"{n}/{len(items)} shuttles and POI have full renders")

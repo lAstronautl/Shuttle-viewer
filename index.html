@@ -11,6 +11,10 @@
 <header>
   <div id="top">
     <h1>StarHorizon Render</h1>
+    <div id="kind" role="group" aria-label="Верфь или точки интереса">
+      <button type="button" data-kind="ship">Верфь</button>
+      <button type="button" data-kind="poi">POI</button>
+    </div>
     <div id="mode" role="group" aria-label="Что показывать на карточках">
       <button type="button" data-mode="render">Рендер</button>
       <button type="button" data-mode="mini">Миникарта</button>
@@ -19,10 +23,11 @@
   </div>
   <div id="filters">
     <input id="q" type="search" placeholder="Поиск по названию, описанию...">
-    <details class="multi" id="group"><summary>Все верфи</summary><div class="opts"></div></details>
-    <select id="category"><option value="">Любой размер</option></select>
-    <details class="multi" id="cls"><summary>Любой класс</summary><div class="opts"></div></details>
-    <details class="multi" id="engine"><summary>Любой двигатель</summary><div class="opts"></div></details>
+    <div id="ship-filters">
+    <details class="multi" id="group"><summary>Верфи</summary><div class="opts"></div></details>
+    <details class="multi" id="category"><summary>Размер</summary><div class="opts"></div></details>
+    <details class="multi" id="cls"><summary>Класс</summary><div class="opts"></div></details>
+    <details class="multi" id="engine"><summary>Генератор</summary><div class="opts"></div></details>
     <details class="multi" id="price">
       <summary>Цена</summary>
       <div class="panel">
@@ -42,6 +47,7 @@
         <button id="preset" type="button">Сбросить</button>
       </div>
     </details>
+    </div>
   </div>
 </header>
 <main id="grid"></main>

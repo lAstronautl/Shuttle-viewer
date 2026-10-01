@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render shuttle mini maps with starhorizon-map-render and attach them to shuttles.json.
+"""Render shuttle and POI mini maps with starhorizon-map-render and attach them to shuttles.json.
 
 Usage: python scripts/render_minimaps.py <path-to-StarHorizon> <path-to-starhorizon-map-render> [out-dir]
 
@@ -19,9 +19,16 @@ if mini_out.exists():
     shutil.rmtree(mini_out)
 mini_out.mkdir(parents=True)
 
+def png_area(f):
+    with open(f, "rb") as fh:
+        head = fh.read(24)
+    return int.from_bytes(head[16:20], "big") * int.from_bytes(head[20:24], "big")
+
+
+items = data["shuttles"] + data.get("pois", [])
 done = {}  # sha -> relative path (shuttles often share a map file)
 tmp = Path(tempfile.mkdtemp())
-for s in data["shuttles"]:
+for s in items:
     sha = s.get("mapSha")
     if not sha:
         continue
@@ -29,8 +36,9 @@ for s in data["shuttles"]:
         target = tmp / f"{sha}.png"
         r = subprocess.run(["node", str(cli), "-i", str(sh / "Resources" / s["mapFile"].lstrip("/")), "-o", str(target)],
                            capture_output=True, text=True)
-        # multi-grid ships are written as <sha>-grid(<uid>).png; use the first grid
-        produced = target if target.exists() else next(iter(sorted(tmp.glob(f"{sha}-grid*.png"))), None)
+        # multi-grid maps are written as <sha>-grid(<uid>).png; use the biggest grid
+        grids = [target] if target.exists() else sorted(tmp.glob(f"{sha}-grid*.png"), key=png_area, reverse=True)
+        produced = grids[0] if grids else None
         if r.returncode != 0 or produced is None:
             print(f"minimap failed for {s['id']}: {r.stderr.strip()[:200]}", file=sys.stderr)
             continue
@@ -39,4 +47,4 @@ for s in data["shuttles"]:
     s["minimap"] = done[sha]
 
 (out / "shuttles.json").write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
-print(f"{sum(1 for s in data['shuttles'] if s.get('minimap'))}/{len(data['shuttles'])} shuttles have mini maps")
+print(f"{sum(1 for s in items if s.get('minimap'))}/{len(items)} shuttles and POI have mini maps")

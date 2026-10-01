@@ -6,11 +6,11 @@ header{position:sticky;top:0;background:var(--bg);padding:12px 16px;border-botto
 #top{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:8px}
 h1{margin:0;margin-right:auto;font-size:20px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
 h1 small{color:var(--mut);font-weight:400}
-#mode{display:flex}
-#mode button{background:var(--card);color:var(--mut);border:1px solid var(--line);padding:6px 14px;font:inherit;cursor:pointer}
-#mode button:first-child{border-radius:4px 0 0 4px}
-#mode button:last-child{border-radius:0 4px 4px 0;border-left:0}
-#mode button.on{color:var(--fg);background:#333;border-color:var(--mut)}
+#mode,#kind{display:flex}
+#mode button,#kind button{background:var(--card);color:var(--mut);border:1px solid var(--line);padding:6px 14px;font:inherit;cursor:pointer}
+#mode button:first-child,#kind button:first-child{border-radius:4px 0 0 4px}
+#mode button:last-child,#kind button:last-child{border-radius:0 4px 4px 0;border-left:0}
+#mode button.on,#kind button.on{color:var(--fg);background:#333;border-color:var(--mut)}
 #all{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:6px 14px;color:var(--fg);text-decoration:none}
 #all:hover{border-color:var(--mut)}
 #filters{display:flex;flex-wrap:wrap;gap:8px}
@@ -58,3 +58,6 @@ details.multi .panel{position:absolute;z-index:5;top:100%;left:0;margin-top:2px;
 #price summary{max-width:none}
 #price .panel{width:340px}
 .seg button{white-space:nowrap}
+details.multi.active summary{border-color:var(--acc);color:#ececec}
+#ship-filters{display:contents}
+#ship-filters[hidden]{display:none}

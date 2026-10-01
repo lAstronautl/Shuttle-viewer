@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export shuttle renders under human-readable names.
+"""Export shuttle and POI renders under human-readable names.
 
 Usage: python scripts/export_renders.py <render-cache-dir> <out> [--only id_or_name,...] [--minimaps <dir-with-shuttles/mini>]
 
@@ -19,7 +19,8 @@ a = ap.parse_args()
 
 cache = Path(a.cache)
 only = [x.strip().lower() for x in a.only.split(",") if x.strip()]
-shuttles = json.loads(Path(a.data).read_text(encoding="utf-8"))["shuttles"]
+data = json.loads(Path(a.data).read_text(encoding="utf-8"))
+items = [(s, "") for s in data["shuttles"]] + [(s, "POI/") for s in data.get("pois", [])]  # POI go to a subfolder
 
 
 def safe(name):
@@ -28,7 +29,7 @@ def safe(name):
 
 entries = []  # (file name, source path)
 used = set()
-for s in shuttles:
+for s, sub in items:
     if only and not any(o == s["id"].lower() or o in s["name"].lower() for o in only):
         continue
     sha = s.get("mapSha")
@@ -40,11 +41,11 @@ for s in shuttles:
     if not sources:
         continue
     base = safe(s["name"])
-    if f"{base.lower()}" in used:
+    if f"{sub}{base}".lower() in used:
         base = f"{base} [{safe(s['id'])}]"
-    used.add(base.lower())
+    used.add(f"{sub}{base}".lower())
     for folder, suffix, src, ext in sources:
-        entries.append((f"{folder}{base}{suffix}{ext}", src))
+        entries.append((f"{folder}{sub}{base}{suffix}{ext}", src))
 
 if not entries:
     sys.exit("nothing to export (no matching renders)")

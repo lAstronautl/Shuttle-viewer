@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render shuttle maps with StarHorizon's Content.MapRenderer into a content-addressed cache directory.
+"""Render shuttle and POI maps with StarHorizon's Content.MapRenderer into a content-addressed cache directory.
 
 Usage: python scripts/render_shuttles.py <path-to-StarHorizon> <cache-dir> [dir-with-shuttles.json]
 
@@ -18,7 +18,8 @@ cache.mkdir(parents=True, exist_ok=True)
 dotnet = os.environ.get("DOTNET", "dotnet")
 
 data = json.loads((out / "shuttles.json").read_text(encoding="utf-8"))
-# RENDER_ONLY: comma-separated shuttle ids or names (case-insensitive, name may be partial); empty = all
+items = data["shuttles"] + data.get("pois", [])
+# RENDER_ONLY: comma-separated shuttle/POI ids or names (case-insensitive, name may be partial); empty = all
 # RENDER_FORCE=true: re-render even if a cached render exists
 only = [x.strip().lower() for x in os.environ.get("RENDER_ONLY", "").split(",") if x.strip()]
 force = os.environ.get("RENDER_FORCE", "").lower() in ("1", "true", "yes")
@@ -30,11 +31,11 @@ def selected(s):
     return any(o == s["id"].lower() or o in s["name"].lower() for o in only)
 
 
-matched = [s for s in data["shuttles"] if selected(s)]
+matched = [s for s in items if selected(s)]
 if only:
     print(f"RENDER_ONLY={only}: matched {[s['id'] for s in matched]}", flush=True)
     if not matched:
-        sys.exit("no shuttle matches RENDER_ONLY")
+        sys.exit("nothing matches RENDER_ONLY")
 
 todo = {}  # sha -> map file
 for s in matched:
@@ -43,7 +44,7 @@ for s in matched:
 
 if os.environ.get("RENDER_LIMIT"):  # for quick local tests
     todo = dict(list(todo.items())[:int(os.environ["RENDER_LIMIT"])])
-print(f"{len(todo)} maps to render ({len(data['shuttles'])} shuttles)", flush=True)
+print(f"{len(todo)} maps to render ({len(data['shuttles'])} shuttles, {len(data.get('pois', []))} POI)", flush=True)
 if todo:
     stage = Path(tempfile.mkdtemp())
     renders = stage / "out"
@@ -62,15 +63,16 @@ if todo:
             print(f"renderer exited with {r.returncode} for batch {i // BATCH}", file=sys.stderr)
         for f in batch:
             sha = Path(f).stem
-            png = renders / sha / f"{sha}-0.webp"
-            if png.exists():
-                shutil.move(png, cache / f"{sha}.webp")
+            # a map may hold several grids (e.g. a POI with docked ships): keep the biggest one
+            grids = sorted((renders / sha).glob(f"{sha}-*.webp"), key=lambda g: g.stat().st_size, reverse=True)
+            if grids:
+                shutil.move(grids[0], cache / f"{sha}.webp")
             else:
                 print(f"::warning::render failed for {sha} ({todo[sha].name})", file=sys.stderr)
         print(f"batch {i // BATCH + 1}/{-(-len(files) // BATCH)} done", flush=True)
 
-# keep only renders that current shuttles still reference, so the cache/artifact doesn't grow forever
-used = {f"{s['mapSha']}.webp" for s in data["shuttles"] if "mapSha" in s}
+# keep only renders that current shuttles/POI still reference, so the cache/artifact doesn't grow forever
+used = {f"{s['mapSha']}.webp" for s in items if "mapSha" in s}
 for f in cache.glob("*.webp"):
     if f.name not in used:
         f.unlink()

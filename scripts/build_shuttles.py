@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build shuttles.json (vessel prototypes) from a StarHorizon checkout.
+"""Build shuttles.json (vessel + pointOfInterest prototypes) from a StarHorizon checkout.
 
 Usage: python scripts/build_shuttles.py <path-to-StarHorizon> [out-dir]
 """
@@ -110,8 +110,39 @@ def main():
         shuttles.append(s)
 
     shuttles.sort(key=lambda x: (str(x["group"]), x["price"]))
-    (out / "shuttles.json").write_text(json.dumps({"generated": datetime.date.today().isoformat(), "shuttles": shuttles}, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"{len(shuttles)} shuttles")
+
+    # points of interest: the name is literal text or a localization key (poi-*-name) from Resources/Locale
+    ftl = {}
+    for lang in ("en-US", "ru-RU"):  # ru-RU last so it wins
+        for f in (root / "Resources" / "Locale" / lang).rglob("*.ftl"):
+            for line in f.read_text(encoding="utf-8", errors="ignore").splitlines():
+                m = re.match(r"^(poi-[\w-]+)\s*=\s*(.+?)\s*$", line)
+                if m:
+                    ftl[m.group(1)] = m.group(2)
+
+    pois = []
+    for path, d in protos(root, "pointOfInterest"):
+        if d.get("abstract") or not d.get("gridPath"):
+            continue
+        name = str(d.get("name") or d["id"])
+        poi = {
+            "id": d["id"],
+            "name": ftl.get(name, name),
+            "group": "POI",
+            "spawnGroup": d.get("spawnGroup") or None,
+            "image": None,
+        }
+        map_file = root / "Resources" / str(d["gridPath"]).lstrip("/")
+        if not map_file.exists():
+            print(f"skip POI {d['id']}: {d['gridPath']} not found", file=sys.stderr)
+            continue
+        poi["mapFile"] = str(d["gridPath"])
+        poi["mapSha"] = hashlib.sha1(map_file.read_bytes()).hexdigest()[:16]
+        pois.append(poi)
+    pois.sort(key=lambda x: x["name"].lower())
+
+    (out / "shuttles.json").write_text(json.dumps({"generated": datetime.date.today().isoformat(), "shuttles": shuttles, "pois": pois}, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"{len(shuttles)} shuttles, {len(pois)} POI")
 
 
 main()
