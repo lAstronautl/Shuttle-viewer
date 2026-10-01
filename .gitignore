@@ -3,3 +3,8 @@ eslint.config.mjs
 node_modules/
 package-lock.json
 package.json
+__pycache__/
+_site/
+shuttles.json
+shuttles/
+render-cache/

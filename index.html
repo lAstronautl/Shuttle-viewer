@@ -1,80 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="user-scalable=no width=device-width, initial-scale=1.0"/> 
-
-    <title>Map Viewer</title>
-    <meta property="og:title" content="RMC-14 Map Viewer"/>
-
-    <meta name="description" content="The cozy home of RMC-14 maps."/>
-    <meta property="og:description" content="The cozy home of RMC-14 maps."/>
-
-    <meta property="og:image" content="https://github.com/Tunguso4ka/map-viewer/blob/master/icon.png?raw=true"/>
-
-    <meta name="keywords" content="RMC-14, Map Viewer, WebMap">
-
-    <link rel="icon" type="image/png" href="icon.png">
-    <link rel="stylesheet" type="text/css" href="theme.css"/>
-  </head>
-  <body>
-    <!-- Full Screen Map Container -->
-    <div id="map_container">
-      <div id="map_zoomable">
-        <div id="tile"></div>
-        <div id="map_insert_buttons">
-        </div>
-        <canvas id="map_canvas">Your browser doesnt support Canvas (Or you toggled it off).</canvas>
-        <ul>
-            <li>Image repository: <a href="https://github.com/Tunguso4ka/rmc14_maps/">https://github.com/Tunguso4ka/rmc14_maps/</a></li>
-            <li>You can share locations by doubleclicking on any tile and copying link.</li>
-            <li>Map Viewer supports keybinds "WASD, HJKL, Arrows" to move, +- to zoom.</li>
-            <li>Suggest your own labels for maps by pinging me on discord. (@tunguso4ka)</li>
-            <li>Best viewed in Mozilla Firefox or it's derivatives, be free, use the fox.</li>
-            <li>More tools/things: <a href="https://tunguso4ka.github.io">tunguso4ka.github.io</a></li>
-        </ul>
-      </div>
-    </div>
-    <!-- Toolbar (Z-Levels, Maps, other) -->
-    <div id="toolbar">
-      <div id="buttons">
-        <button
-          title="Show/hide the list of maps, inserts and labels."
-          onclick="toggle_hidden('maplist')"
-          >#</button>
-        <button
-          id="button_labels"
-          title="Show/hide labels on map."
-          onclick="toggle_setting('show_labels')"
-          hidden=""
-          >_A</button>
-        <button
-          id="button_borders"
-          title="Show/hide borders of areas"
-          onclick="toggle_setting('show_area_borders')"
-          hidden=""
-          >[]</button>
-        <button
-          id="button_areas"
-          title="Show/hide little tooltip with info about tile."
-          onclick="toggle_hidden('area_info_label')"
-          >i?</button>
-        <span style="display: flex; flex-direction: column;">
-            <button
-                onclick="update_zoom(null, null, 1.4)"
-                title="Zoom In"
-                >+</button>
-            <button
-                onclick="update_zoom(null, null, 0.6)"
-                title="Zoom out"
-                >-</button>
-        </span>
-      </div>
-      <ul id="maplist" hidden=""></ul>
-    </div>
-    <!-- Info box -->
-    <p id="area_info_label" hidden="" ></p>
-    <!-- Scripts -->
-    <script type="text/javascript" src="logic.js"></script>
-  </body>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shuttle Viewer</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Shuttle Viewer <small id="count"></small></h1>
+  <div id="filters">
+    <input id="q" type="search" placeholder="Поиск по названию, описанию…">
+    <select id="group"><option value="">Все магазины</option></select>
+    <select id="category"><option value="">Любой размер</option></select>
+    <select id="cls"><option value="">Любой класс</option></select>
+    <select id="engine"><option value="">Любое топливо/двигатель</option></select>
+    <select id="sort">
+      <option value="price-asc">Цена ↑</option>
+      <option value="price-desc">Цена ↓</option>
+      <option value="name">Название</option>
+    </select>
+  </div>
+</header>
+<main id="grid"></main>
+<footer>Данные автоматически собираются из <a href="https://github.com/StarHorizon14/StarHorizon">StarHorizon14/StarHorizon</a>. Обновлено: <span id="updated">—</span></footer>
+<script src="app.js"></script>
+</body>
 </html>
