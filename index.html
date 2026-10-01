@@ -19,13 +19,25 @@
   </div>
   <div id="filters">
     <input id="q" type="search" placeholder="Поиск по названию, описанию...">
-    <select id="group"><option value="">Все верфи</option></select>
+    <details class="multi" id="group"><summary>Все верфи</summary><div class="opts"></div></details>
     <select id="category"><option value="">Любой размер</option></select>
     <details class="multi" id="cls"><summary>Любой класс</summary><div class="opts"></div></details>
     <details class="multi" id="engine"><summary>Любой двигатель</summary><div class="opts"></div></details>
-    <label class="chk"><input id="custom" type="checkbox" checked> Верфь Custom</label>
-    <input id="pmin" type="number" min="0" step="1000" inputmode="numeric" placeholder="Цена от">
-    <input id="pmax" type="number" min="0" step="1000" inputmode="numeric" placeholder="Цена до">
+    <details class="multi" id="price">
+      <summary>Цена</summary>
+      <div class="panel">
+        <div class="range">
+          <input id="rlo" type="range" aria-label="Цена от">
+          <input id="rhi" type="range" aria-label="Цена до">
+        </div>
+        <div class="nums">
+          <input id="pmin" type="number" min="0" inputmode="numeric" aria-label="Цена от">
+          <span>-</span>
+          <input id="pmax" type="number" min="0" inputmode="numeric" aria-label="Цена до">
+        </div>
+        <button id="preset" type="button">Сбросить</button>
+      </div>
+    </details>
     <select id="sort">
       <option value="price-asc">Цена по возрастанию</option>
       <option value="price-desc">Цена по убыванию</option>

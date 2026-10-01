@@ -12,23 +12,70 @@ function el(tag, cls, text) {
   return e;
 }
 
-// multi-select dropdown (details + checkboxes): selected values match as "any of"
-const multi = { cls: new Set(), engine: new Set() };
+// Multi-select dropdowns (details + checkboxes).
+//  cls / engine: a shuttle must have ALL the checked values (AME + APU = both engines); nothing checked = no filter.
+//  group (shipyards): all checked by default except HIDDEN_BY_DEFAULT (Custom); toggle a shipyard to show/hide its shuttles.
+const multi = { cls: new Set(), engine: new Set(), group: new Set() };
+const HIDDEN_BY_DEFAULT = new Set(["Custom"]);
 
-function fillMulti(id, anyLabel, values) {
+function fillMulti(id, anyLabel, values, allChecked = false) {
   const box = $(id), opts = box.querySelector(".opts"), sum = box.querySelector("summary");
-  [...new Set(values)].filter(Boolean).sort().forEach(v => {
+  const list = [...new Set(values)].filter(Boolean).sort();
+  const label = () => {
+    const n = multi[id].size;
+    if (allChecked) {
+      const off = list.filter(v => !multi[id].has(v));
+      if (!off.length) return anyLabel;
+      if (!n) return "Ничего не выбрано";
+      return off.length <= 2 ? `Все, кроме ${off.join(", ")}` : `Верфи: ${[...multi[id]].sort().join(", ")}`;
+    }
+    return n ? [...multi[id]].sort().join(" + ") : anyLabel;
+  };
+  list.forEach(v => {
     const l = el("label", "opt");
     const c = el("input");
     c.type = "checkbox";
+    if (allChecked && !HIDDEN_BY_DEFAULT.has(v)) { c.checked = true; multi[id].add(v); }
     c.onchange = () => {
       c.checked ? multi[id].add(v) : multi[id].delete(v);
-      sum.textContent = multi[id].size ? [...multi[id]].sort().join(", ") : anyLabel;
+      sum.textContent = label();
       render();
     };
     l.append(c, document.createTextNode(" " + v));
     opts.appendChild(l);
   });
+  sum.textContent = label();
+}
+
+// price: dual slider + number fields, from the cheapest to the most expensive shuttle
+const price = { min: 0, max: 0, lo: 0, hi: 0 };
+
+function setPrice(lo, hi, from) {
+  price.lo = Math.max(price.min, Math.min(lo, price.max));
+  price.hi = Math.max(price.min, Math.min(hi, price.max));
+  if (price.lo > price.hi) from === "hi" ? price.lo = price.hi : price.hi = price.lo;
+  $("rlo").value = price.lo; $("rhi").value = price.hi;
+  $("pmin").value = price.lo; $("pmax").value = price.hi;
+  const full = price.lo === price.min && price.hi === price.max;
+  $("price").querySelector("summary").textContent = full ? "Цена" : `Цена: ${price.lo.toLocaleString("ru-RU")} - ${price.hi.toLocaleString("ru-RU")}`;
+  render();
+}
+
+function initPrice() {
+  const prices = all.map(s => s.price);
+  price.min = Math.min(...prices);
+  price.max = Math.max(...prices);
+  for (const id of ["rlo", "rhi"]) {
+    $(id).min = price.min; $(id).max = price.max; $(id).step = 250;
+  }
+  $("pmin").min = $("pmax").min = price.min;
+  $("pmin").max = $("pmax").max = price.max;
+  $("rlo").oninput = () => setPrice(+$("rlo").value, price.hi, "lo");
+  $("rhi").oninput = () => setPrice(price.lo, +$("rhi").value, "hi");
+  $("pmin").onchange = () => setPrice(parseInt($("pmin").value, 10) || price.min, price.hi, "lo");
+  $("pmax").onchange = () => setPrice(price.lo, parseInt($("pmax").value, 10) || price.max, "hi");
+  $("preset").onclick = () => setPrice(price.min, price.max);
+  setPrice(price.min, price.max);
 }
 
 document.addEventListener("click", e => {
@@ -86,15 +133,13 @@ function card(s) {
 
 function render() {
   const q = $("q").value.trim().toLowerCase();
-  const pmin = parseInt($("pmin").value, 10), pmax = parseInt($("pmax").value, 10);
-  const g = $("group").value, cat = $("category").value, withCustom = $("custom").checked;
+  const cat = $("category").value;
   const list = all.filter(s =>
     (!q || (s.name + " " + s.description + " " + (s.descriptionRu || "")).toLowerCase().includes(q)) &&
-    (isNaN(pmin) || s.price >= pmin) && (isNaN(pmax) || s.price <= pmax) &&
-    (!g || s.group === g) && (!cat || s.category === cat) &&
-    (withCustom || s.group !== "Custom") &&
-    (!multi.cls.size || s.class.some(x => multi.cls.has(x))) &&
-    (!multi.engine.size || s.engine.some(x => multi.engine.has(x))));
+    s.price >= price.lo && s.price <= price.hi &&
+    multi.group.has(s.group) && (!cat || s.category === cat) &&
+    [...multi.cls].every(x => s.class.includes(x)) &&
+    [...multi.engine].every(x => s.engine.includes(x)));
   const sort = $("sort").value;
   list.sort(sort === "name" ? (a, b) => a.name.localeCompare(b.name)
     : sort === "price-desc" ? (a, b) => b.price - a.price : (a, b) => a.price - b.price);
@@ -113,10 +158,11 @@ document.querySelectorAll("#mode button").forEach(b => b.addEventListener("click
 fetch("shuttles.json").then(r => r.json()).then(d => {
   all = d.shuttles;
   $("updated").textContent = d.generated || "-";
-  fill("group", all.map(s => s.group));
+  fillMulti("group", "Все верфи", all.map(s => s.group), true);
   fill("category", all.map(s => s.category));
   fillMulti("cls", "Любой класс", all.flatMap(s => s.class));
   fillMulti("engine", "Любой двигатель", all.flatMap(s => s.engine));
-  ["q", "group", "category", "custom", "pmin", "pmax", "sort"].forEach(id => $(id).addEventListener("input", render));
+  ["q", "category", "sort"].forEach(id => $(id).addEventListener("input", render));
+  initPrice(); // renders
   setMode(mode);
 });

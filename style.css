@@ -31,9 +31,6 @@ input,select{background:var(--card);color:var(--fg);border:1px solid var(--line)
 .tag{background:var(--tag);border:1px solid var(--line);border-radius:3px;padding:1px 8px;font-size:12px;color:var(--acc)}
 .tag.fuel{border-style:dashed}
 footer{padding:16px;color:var(--mut);text-align:center;font-size:13px}
-input[type=number]{width:120px}
-.chk{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--card);cursor:pointer}
-.chk input{accent-color:#9a9a9a}
 details.multi{position:relative}
 details.multi summary{list-style:none;background:var(--card);border:1px solid var(--line);border-radius:4px;padding:6px 28px 6px 8px;cursor:pointer;min-width:150px;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative}
 details.multi summary::-webkit-details-marker{display:none}
@@ -42,3 +39,14 @@ details.multi .opts{position:absolute;z-index:5;top:100%;left:0;margin-top:2px;m
 .opt{display:flex;align-items:center;gap:6px;padding:3px 8px;white-space:nowrap;cursor:pointer;border-radius:3px}
 .opt:hover{background:#333}
 .opt input{accent-color:#9a9a9a}
+details.multi .panel{position:absolute;z-index:5;top:100%;left:0;margin-top:2px;width:300px;background:var(--card);border:1px solid var(--line);border-radius:4px;padding:14px 14px 12px;display:flex;flex-direction:column;gap:12px}
+.range{position:relative;height:22px}
+.range input{position:absolute;left:0;top:0;width:100%;height:22px;margin:0;background:none;pointer-events:none;-webkit-appearance:none;appearance:none}
+.range input::-webkit-slider-runnable-track{height:4px;background:var(--line);border-radius:2px}
+.range input::-moz-range-track{height:4px;background:var(--line);border-radius:2px}
+.range input::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;width:16px;height:16px;margin-top:-6px;border-radius:50%;background:var(--acc);border:2px solid var(--bg);cursor:pointer}
+.range input::-moz-range-thumb{pointer-events:auto;width:12px;height:12px;border-radius:50%;background:var(--acc);border:2px solid var(--bg);cursor:pointer}
+.nums{display:flex;align-items:center;gap:8px}
+.nums input{width:100%;min-width:0}
+#preset{align-self:flex-end;background:var(--card);color:var(--mut);border:1px solid var(--line);border-radius:4px;padding:4px 12px;font:inherit;cursor:pointer}
+#price .panel{left:auto;right:0;max-width:calc(100vw - 32px)}
