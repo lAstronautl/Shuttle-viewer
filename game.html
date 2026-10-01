@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StarHorizon Render: игра</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="game.css">
+</head>
+<body class="game">
+<header>
+  <div id="top">
+    <h1>StarHorizon Render: игра</h1>
+    <a class="btn" href="./">К каталогу</a>
+  </div>
+</header>
+
+<main id="gm">
+  <section id="setup">
+    <p class="lead">Открывайте картинку по одному пикселю и угадайте, что на ней. Чем меньше пикселей открыто, быстрее ответ и меньше ошибок, тем больше очков.</p>
+
+    <div class="row">
+      <span class="lbl">Что угадываем</span>
+      <div class="seg" id="s-kind">
+        <button type="button" data-kind="ship">Шаттлы</button>
+        <button type="button" data-kind="poi">POI</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <span class="lbl">Сложность</span>
+      <div class="seg" id="s-diff">
+        <button type="button" data-diff="easy">Лёгкая: рендер</button>
+        <button type="button" data-diff="hard">Сложная: миникарта</button>
+      </div>
+    </div>
+
+    <label class="row chk" id="s-custom-row">
+      <input type="checkbox" id="s-custom"> Включать шаттлы верфи Custom
+    </label>
+
+    <p id="s-info" class="note"></p>
+    <p id="s-best" class="note"></p>
+    <button id="start" class="primary" type="button">Начать игру</button>
+
+    <details class="rules">
+      <summary>Как считаются очки</summary>
+      <ul>
+        <li>Пиксель - это один тайл карты: в миникарте он равен одной точке, в рендере блоку 32x32.</li>
+        <li>До 700 очков за малое число открытых пикселей: чем больше открыто, тем быстрее они тают.</li>
+        <li>До 300 очков за скорость: за 90 секунд уходят полностью.</li>
+        <li>Каждая ошибка стоит 75 очков.</li>
+        <li>Сложная сложность умножает результат на 1,5.</li>
+        <li>В игре 5 раундов, сдаться можно в любой момент (0 очков за раунд).</li>
+      </ul>
+    </details>
+  </section>
+
+  <section id="play" hidden>
+    <div class="hud">
+      <span>Раунд <b id="h-round">1/5</b></span>
+      <span>Открыто <b id="h-px">0</b></span>
+      <span>Время <b id="h-time">0</b> с</span>
+      <span>Очки <b id="h-score">0</b></span>
+      <span class="now">Сейчас можно получить <b id="h-now">0</b></span>
+    </div>
+
+    <div id="board"><canvas id="cv"></canvas></div>
+
+    <form id="guess" autocomplete="off">
+      <input id="g-input" list="g-names" placeholder="Название..." aria-label="Ваш ответ">
+      <datalist id="g-names"></datalist>
+      <button type="submit" class="primary">Угадать</button>
+      <button type="button" id="g-random">Случайный пиксель</button>
+      <button type="button" id="g-giveup">Сдаться</button>
+    </form>
+    <p id="g-msg" class="note" aria-live="polite"></p>
+
+    <div id="result" hidden>
+      <h2 id="r-title"></h2>
+      <p id="r-detail"></p>
+      <p><a id="r-view" target="_blank">Открыть в просмотрщике</a></p>
+      <button id="r-next" class="primary" type="button">Дальше</button>
+    </div>
+  </section>
+
+  <section id="final" hidden>
+    <h2>Игра окончена</h2>
+    <p class="big"><b id="f-score">0</b> очков</p>
+    <p id="f-best" class="note"></p>
+    <ul id="f-list"></ul>
+    <button id="again" class="primary" type="button">Играть ещё</button>
+  </section>
+</main>
+
+<script src="game.js"></script>
+</body>
+</html>

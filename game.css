@@ -1,0 +1,43 @@
+body.game header{position:static}
+#gm{max-width:900px;margin:0 auto;padding:16px}
+.btn{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:6px 14px;color:var(--fg);text-decoration:none}
+.btn:hover{border-color:var(--mut)}
+.lead{color:var(--mut);margin-top:0}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:14px 0}
+.lbl{min-width:130px;color:var(--mut)}
+.seg{display:flex}
+.seg button{background:var(--card);color:var(--mut);border:1px solid var(--line);padding:6px 14px;font:inherit;cursor:pointer}
+.seg button:first-child{border-radius:4px 0 0 4px}
+.seg button:last-child{border-radius:0 4px 4px 0;border-left:0}
+.seg button.on{color:var(--fg);background:#333;border-color:var(--mut)}
+.chk{cursor:pointer}
+.chk input{accent-color:#9a9a9a}
+.note{color:var(--mut);min-height:1.4em;margin:8px 0}
+.primary{background:#3a3a3a;color:var(--fg);border:1px solid var(--mut);border-radius:4px;padding:7px 18px;font:inherit;cursor:pointer}
+.primary:hover:not(:disabled){background:#454545}
+button:disabled{opacity:.45;cursor:default}
+#guess button:not(.primary),#r-next{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:7px 14px;font:inherit;cursor:pointer}
+#r-next{padding:7px 18px}
+.rules{margin-top:22px;color:var(--mut)}
+.rules summary{cursor:pointer}
+.rules li{margin:4px 0}
+
+.hud{display:flex;flex-wrap:wrap;gap:6px 22px;margin-bottom:12px;color:var(--mut)}
+.hud b{color:var(--fg);font-variant-numeric:tabular-nums}
+.hud .now{margin-left:auto}
+#board{background:#111;border:1px solid var(--line);border-radius:6px;padding:8px;display:flex;justify-content:center;overflow:auto}
+#cv{display:block;max-width:100%;height:auto;cursor:crosshair;image-rendering:auto}
+#cv.done{cursor:default}
+#guess{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+#g-input{flex:1;min-width:200px}
+#g-msg.bad{color:#d98a8a}
+#g-msg.good{color:#9ccf9c}
+#result{margin-top:14px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:6px}
+#result h2{margin:0 0 6px;font-size:20px}
+#result p{margin:6px 0;color:var(--mut)}
+#result a{color:var(--acc)}
+#final{text-align:center}
+#final .big{font-size:36px;margin:8px 0}
+#f-list{list-style:none;padding:0;margin:16px auto;max-width:520px;text-align:left}
+#f-list li{display:flex;justify-content:space-between;gap:12px;padding:6px 10px;border-bottom:1px solid var(--line)}
+#f-list li span:last-child{font-variant-numeric:tabular-nums}

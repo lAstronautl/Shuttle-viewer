@@ -11,8 +11,8 @@ h1 small{color:var(--mut);font-weight:400}
 #mode button:first-child,#kind button:first-child{border-radius:4px 0 0 4px}
 #mode button:last-child,#kind button:last-child{border-radius:0 4px 4px 0;border-left:0}
 #mode button.on,#kind button.on{color:var(--fg);background:#333;border-color:var(--mut)}
-#all{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:6px 14px;color:var(--fg);text-decoration:none}
-#all:hover{border-color:var(--mut)}
+#all,#gamelink{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:6px 14px;color:var(--fg);text-decoration:none}
+#all:hover,#gamelink:hover{border-color:var(--mut)}
 #filters{display:flex;flex-wrap:wrap;gap:8px}
 input,select{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;font:inherit}
 #q{flex:1;min-width:180px}
