@@ -1,0 +1,92 @@
+name: Render shuttles
+
+# Heavy job (up to ~2 h on the first run): renders every shuttle map with StarHorizon's Content.MapRenderer.
+# Renders are cached by the sha1 of each map file, so later runs only render new/changed shuttles.
+# The result is uploaded as the `shuttle-renders` artifact; the site workflow (pages.yml) picks it up.
+
+on:
+  schedule:
+    - cron: "0 4 * * 1,5" # Mon, Fri 04:00 UTC; also keeps the render cache from expiring
+  workflow_dispatch:
+    inputs:
+      ships:
+        description: "Only render these shuttles: comma-separated ids or names (e.g. Vagabond, hellfish). Empty = everything that is missing."
+        required: false
+        default: ""
+      force:
+        description: "Re-render even if a cached render exists (use for a shuttle that was rendered broken)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: render
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Fetch StarHorizon (with RobustToolbox submodules)
+        run: git clone --depth 1 --recurse-submodules --shallow-submodules https://github.com/StarHorizon14/StarHorizon.git ../StarHorizon
+
+      - name: Build Content.MapRenderer
+        working-directory: ../StarHorizon
+        run: dotnet build Content.MapRenderer -c Release
+
+      - name: List shuttles (shuttles.json)
+        run: python scripts/build_shuttles.py ../StarHorizon .
+
+      - name: Restore render cache
+        uses: actions/cache/restore@v4
+        with:
+          path: render-cache
+          key: renders-${{ github.run_id }}
+          restore-keys: renders-
+
+      - name: Render shuttles with Content.MapRenderer
+        env:
+          RENDER_ONLY: ${{ inputs.ships }}
+          RENDER_FORCE: ${{ inputs.force }}
+        run: python scripts/render_shuttles.py ../StarHorizon render-cache .
+
+      - name: Save render cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: render-cache
+          key: renders-${{ github.run_id }}
+
+      - name: Export renders under shuttle names
+        env:
+          RENDER_ONLY: ${{ inputs.ships }}
+        run: python scripts/export_renders.py render-cache export --only "$RENDER_ONLY"
+
+      - name: Upload named renders (download this one to get "<Shuttle name>.webp" files)
+        uses: actions/upload-artifact@v4
+        with:
+          name: shuttle-renders-named
+          path: export
+          retention-days: 30
+
+      - name: Upload renders (cache format for the site build)
+        uses: actions/upload-artifact@v4
+        with:
+          name: shuttle-renders
+          path: render-cache
+          retention-days: 90
+          if-no-files-found: error

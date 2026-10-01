@@ -1,23 +1,31 @@
-name: Build & deploy to GitHub Pages
+name: Build & deploy site
+
+# Fast job (a few minutes): builds the site and deploys it to GitHub Pages.
+# Uses the latest successful `Render shuttles` run for the full shuttle renders,
+# so a push only rebuilds and redeploys the site; shuttles are never re-rendered here (see render.yml).
 
 on:
-  schedule:
-    - cron: "0 4 * * 1,5" # twice a week (Mon, Fri 04:00 UTC): refresh from StarHorizon and keep the render cache alive
+  push:
+    branches: [master, main]
+  workflow_run:
+    workflows: ["Render shuttles"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
   contents: read
+  actions: read # download the renders artifact
   pages: write
   id-token: write
 
 concurrency:
   group: pages
-  cancel-in-progress: false # the first run renders every shuttle and takes long
+  cancel-in-progress: true
 
 jobs:
   build:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 350
     steps:
       - uses: actions/checkout@v4
 
@@ -26,23 +34,31 @@ jobs:
           python-version: "3.12"
       - run: pip install pyyaml
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-node@v4
         with:
-          dotnet-version: "9.0.x"
+          node-version: 20
 
-      - name: Fetch StarHorizon (with RobustToolbox submodules)
-        run: git clone --depth 1 --recurse-submodules --shallow-submodules https://github.com/StarHorizon14/StarHorizon.git ../StarHorizon
-
-      - name: Build Content.MapRenderer
-        working-directory: ../StarHorizon
-        run: dotnet build Content.MapRenderer -c Release
+      - name: Fetch StarHorizon (only prototypes and the maps)
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse https://github.com/StarHorizon14/StarHorizon.git ../StarHorizon
+          git -C ../StarHorizon sparse-checkout set Resources/Prototypes Resources/Maps
 
       - name: Generate shuttles.json from vessel prototypes
         run: python scripts/build_shuttles.py ../StarHorizon .
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
+      - name: Download shuttle renders (latest successful render run)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p render-cache
+          run_id=$(gh run list --workflow render.yml --status success --limit 1 --json databaseId --jq '.[0].databaseId')
+          if [ -n "$run_id" ]; then
+            gh run download "$run_id" --name shuttle-renders --dir render-cache || echo "::warning::could not download renders"
+          else
+            echo "::warning::no successful render run yet; run 'Render shuttles' first for full renders"
+          fi
+      - run: python scripts/attach_renders.py render-cache .
+
       - name: Build starhorizon-map-render (mini maps)
         run: |
           git clone --depth 1 https://github.com/lAstronautl/starhorizon-map-render.git ../starhorizon-map-render
@@ -52,28 +68,12 @@ jobs:
       - name: Render mini maps
         run: python scripts/render_minimaps.py ../StarHorizon ../starhorizon-map-render .
 
-      # Renders are cached by the sha1 of each shuttle map file, so only new/changed shuttles get rendered.
-      - name: Restore render cache
-        uses: actions/cache/restore@v4
-        with:
-          path: render-cache
-          key: renders-${{ github.run_id }}
-          restore-keys: renders-
-
-      - name: Render shuttles with Content.MapRenderer
-        run: python scripts/render_shuttles.py ../StarHorizon render-cache .
-
-      - name: Save render cache
-        if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: render-cache
-          key: renders-${{ github.run_id }}
-
       - name: Assemble site
         run: |
           mkdir _site
-          cp -r index.html style.css app.js icon.png shuttles.json shuttles _site/
+          cp -r index.html style.css app.js icon.png shuttles.json shuttles viewer _site/
+          python scripts/viewer_shuttles.py _site
+          python scripts/export_renders.py render-cache _site/shuttle-renders.zip --minimaps . || true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

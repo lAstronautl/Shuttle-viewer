@@ -7,8 +7,8 @@
 1. `scripts/build_shuttles.py` читает `vessel`-прототипы StarHorizon (с наследованием от `parent`)
    и пишет `shuttles.json`: название, цена, размер, магазин, класс, двигатель/топливо, описание.
 2. `scripts/render_shuttles.py` рендерит карту каждого шаттла (`shuttlePath`) оригинальным
-   `Content.MapRenderer` из StarHorizon (тот же рендер, что в игре) и кладёт картинки в `shuttles/img/`.
-   Рендеры кэшируются по sha1 файла карты: перерисовываются только новые/изменённые шаттлы.
+   `Content.MapRenderer` из StarHorizon (тот же рендер, что в игре) в кэш `render-cache/<sha1 карты>.webp`.
+   Перерисовываются только новые/изменённые шаттлы. `scripts/attach_renders.py` кладёт рендеры в `shuttles/img/`.
 3. `scripts/render_minimaps.py` рисует миникарты (1 пиксель = 1 тайл, как в гайдбуке) через
    [starhorizon-map-render](https://github.com/lAstronautl/starhorizon-map-render) и кладёт их в `shuttles/mini/`.
    В карточке можно переключаться между полным рендером и миникартой.
@@ -21,6 +21,7 @@ git clone --depth 1 --recurse-submodules --shallow-submodules https://github.com
 (cd ../StarHorizon && dotnet build Content.MapRenderer -c Release)
 python scripts/build_shuttles.py ../StarHorizon .
 python scripts/render_shuttles.py ../StarHorizon render-cache .   # ~40 c на шаттл, первый запуск долгий
+python scripts/attach_renders.py render-cache .
 git clone --depth 1 https://github.com/lAstronautl/starhorizon-map-render.git ../starhorizon-map-render
 (cd ../starhorizon-map-render && npm ci && npm run build --workspace=renderer)
 python scripts/render_minimaps.py ../StarHorizon ../starhorizon-map-render .
@@ -28,8 +29,37 @@ python -m http.server
 ```
 `RENDER_LIMIT=N` ограничивает число шаттлов для быстрой проверки.
 
-## GitHub Pages
-Workflow `.github/workflows/pages.yml` два раза в неделю (понедельник и пятница, 04:00 UTC) и вручную (Actions → Run workflow); по push не запускается,
-собирает MapRenderer, генерирует данные, рендерит шаттлы (с кэшем) и публикует сайт.
-Первый запуск рендерит все ~170 шаттлов и идёт долго (порядка 1,5–2 часов), дальше — минуты.
-Включить один раз: **Settings → Pages → Source: GitHub Actions**.
+## GitHub Actions: два workflow
+- **Render shuttles** (`.github/workflows/render.yml`) — тяжёлый: собирает `Content.MapRenderer` и рендерит карты
+  шаттлов (первый раз до ~2 часов, дальше только новые/изменённые благодаря кэшу). Результат выкладывается
+  артефактом `shuttle-renders`. Запускается по расписанию (понедельник и пятница, 04:00 UTC) и вручную.
+- **Build & deploy site** (`.github/workflows/pages.yml`) — быстрый (несколько минут): собирает `shuttles.json`,
+  берёт рендеры из последнего успешного Render shuttles, рисует миникарты и деплоит на GitHub Pages.
+  Запускается при push в `master`/`main`, автоматически после успешного Render shuttles и вручную.
+  Сам рендер шаттлов здесь никогда не выполняется.
+
+Render shuttles при ручном запуске принимает параметры: `ships` — id или названия шаттлов через запятую
+(например `Vagabond, hellfish`; пусто = всё, чего ещё нет в кэше) и `force` — перерисовать, даже если рендер уже есть.
+Так можно быстро перерисовать один сломанный шаттл, не дожидаясь остальных (старые рендеры берутся из кэша).
+Локально то же самое: `RENDER_ONLY=Vagabond RENDER_FORCE=true python scripts/render_shuttles.py ...`.
+
+## Просмотрщик (`viewer/`)
+Страница `viewer/` показывает рендер шаттла на весь экран: масштаб колесом, `+`/`-` или щипком, перемещение
+перетаскиванием, WASD / стрелками / HJKL, двойной клик вписывает картинку в экран. Список шаттлов открывается кнопкой `#`.
+Файл `viewer/maps.json` пустой в репозитории: при сборке сайта `scripts/viewer_shuttles.py` заполняет его шаттлами
+(группы «Шаттлы: …»). Шаттл открывается по ссылке `viewer/?map=ship-<id>`; из карточки и окна просмотра есть
+ссылка «Открыть в просмотрщике».
+
+## Экспорт рендеров
+- **На сайте:** клик по картинке открывает шаттл крупно (рендер/миникарта, Esc закрывает); галочка в углу карточки
+  выбирает её для архива. Кнопка «Скачать zip» берёт выбранные карточки, а если ничего не выбрано — все найденные.
+  У каждой карточки есть ссылка «Скачать» (`<Название>.webp`); кнопка «Скачать zip» собирает архив
+  из шаттлов, найденных текущим поиском и фильтрами (один шаттл — zip с его названием), а в подвале лежит
+  `shuttle-renders.zip` со всеми рендерами и миникартами.
+- **Из Actions:** Render shuttles выкладывает артефакт `shuttle-renders-named` с файлами `<Название шаттла>.webp`
+  (при запуске с `ships` — только выбранные).
+- **Локально:** `python scripts/export_renders.py render-cache out.zip [--only Vagabond,hellfish] [--minimaps .]`
+  (если `out` не оканчивается на `.zip`, файлы копируются в папку).
+
+Render shuttles по push не запускается: только по расписанию и вручную. Включить один раз: **Settings → Pages → Source: GitHub Actions**.
+Перед первым деплоем запустите Render shuttles вручную, иначе на сайте будут только миникарты.

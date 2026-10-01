@@ -26,3 +26,19 @@ footer{padding:16px;color:var(--mut);text-align:center;font-size:13px}
 .views{position:absolute;right:6px;bottom:6px;display:flex;gap:2px}
 .views button{background:var(--card);color:var(--mut);border:1px solid var(--line);border-radius:3px;font:inherit;font-size:12px;padding:2px 8px;cursor:pointer}
 .views button.on{color:var(--fg);border-color:var(--mut)}
+button#dl{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:6px 12px;font:inherit;cursor:pointer}
+button#dl:disabled{color:var(--mut);cursor:wait}
+a.dl{font-size:12px;align-self:flex-start}
+.card{position:relative}
+.card.sel{border-color:var(--acc)}
+.pick{position:absolute;top:8px;left:8px;z-index:1;width:18px;height:18px;accent-color:#9a9a9a;cursor:pointer}
+.img{cursor:zoom-in}
+button#clear{background:var(--card);color:var(--mut);border:1px solid var(--line);border-radius:4px;padding:6px 12px;font:inherit;cursor:pointer}
+#view{position:fixed;inset:0;z-index:10;background:#000000f2;display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px;overflow:auto;cursor:zoom-out}
+#view[hidden]{display:none}
+#view img{max-width:100%;image-rendering:auto;cursor:default;background:#111;border:1px solid var(--line)}
+#view img.mini{image-rendering:pixelated;width:min(100%,480px);height:auto}
+.vbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;color:var(--fg)}
+.vbar button{background:var(--card);color:var(--mut);border:1px solid var(--line);border-radius:3px;font:inherit;padding:2px 10px;cursor:pointer}
+.vbar button.on{color:var(--fg);border-color:var(--mut)}
+.links{display:flex;gap:12px}

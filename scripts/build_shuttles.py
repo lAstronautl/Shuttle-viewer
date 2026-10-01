@@ -78,7 +78,6 @@ def main():
             "class": d.get("class") or [],
             "engine": d.get("engine") or [],
             "access": d.get("access") or None,
-            "source": str(path.relative_to(root)),
             "image": None,  # filled in by render_shuttles.py
         }
         map_file = root / "Resources" / str(d["shuttlePath"]).lstrip("/")

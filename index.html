@@ -16,6 +16,8 @@
     <select id="category"><option value="">Любой размер</option></select>
     <select id="cls"><option value="">Любой класс</option></select>
     <select id="engine"><option value="">Любое топливо/двигатель</option></select>
+    <button id="dl" type="button" title="Скачать рендеры найденных шаттлов в zip с их названиями">Скачать zip</button>
+    <button id="clear" type="button" hidden>Снять выбор</button>
     <select id="sort">
       <option value="price-asc">Цена ↑</option>
       <option value="price-desc">Цена ↓</option>
@@ -24,7 +26,9 @@
   </div>
 </header>
 <main id="grid"></main>
-<footer>Данные автоматически собираются из <a href="https://github.com/StarHorizon14/StarHorizon">StarHorizon14/StarHorizon</a>. Обновлено: <span id="updated">—</span></footer>
+<div id="view" hidden></div>
+<footer><a href="viewer/">Просмотрщик карт</a> · <a href="shuttle-renders.zip">Все рендеры (zip)</a> · Данные автоматически собираются из <a href="https://github.com/StarHorizon14/StarHorizon">StarHorizon14/StarHorizon</a>. Обновлено: <span id="updated">—</span></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
