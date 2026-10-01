@@ -9,26 +9,29 @@
 </head>
 <body>
 <header>
-  <h1>Shuttle Viewer <small id="count"></small></h1>
+  <div id="top">
+    <h1>Shuttle Viewer <small id="count"></small></h1>
+    <div id="mode" role="group" aria-label="Что показывать на карточках">
+      <button type="button" data-mode="render">Рендер</button>
+      <button type="button" data-mode="mini">Миникарта</button>
+    </div>
+    <a id="all" href="shuttle-renders.zip" download>Скачать все (zip)</a>
+  </div>
   <div id="filters">
-    <input id="q" type="search" placeholder="Поиск по названию, описанию…">
+    <input id="q" type="search" placeholder="Поиск по названию, описанию...">
     <select id="group"><option value="">Все магазины</option></select>
     <select id="category"><option value="">Любой размер</option></select>
     <select id="cls"><option value="">Любой класс</option></select>
     <select id="engine"><option value="">Любое топливо/двигатель</option></select>
-    <button id="dl" type="button" title="Скачать рендеры найденных шаттлов в zip с их названиями">Скачать zip</button>
-    <button id="clear" type="button" hidden>Снять выбор</button>
     <select id="sort">
-      <option value="price-asc">Цена ↑</option>
-      <option value="price-desc">Цена ↓</option>
+      <option value="price-asc">Цена по возрастанию</option>
+      <option value="price-desc">Цена по убыванию</option>
       <option value="name">Название</option>
     </select>
   </div>
 </header>
 <main id="grid"></main>
-<div id="view" hidden></div>
-<footer><a href="viewer/">Просмотрщик карт</a> · <a href="shuttle-renders.zip">Все рендеры (zip)</a> · Данные автоматически собираются из <a href="https://github.com/StarHorizon14/StarHorizon">StarHorizon14/StarHorizon</a>. Обновлено: <span id="updated">—</span></footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<footer>Данные автоматически собираются из <a href="https://github.com/StarHorizon14/StarHorizon">StarHorizon14/StarHorizon</a>. Обновлено: <span id="updated">-</span></footer>
 <script src="app.js"></script>
 </body>
 </html>

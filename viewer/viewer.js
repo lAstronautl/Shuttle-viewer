@@ -2,8 +2,13 @@ const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
 const stage = $("stage"), img = $("img");
 const view = { x: 0, y: 0, zoom: 1 };
-const LIMIT = { min: 0.1, max: 8 };
+const LIMIT = { min: 0.1, max: 64 };
 let maps = {}, current = null;
+let mode = params.get("view") || "render"; // "render" | "mini", shared with the catalog
+if (!params.get("view")) {
+  try { mode = localStorage.getItem("mode") || "render"; } catch (e) { /* storage may be blocked */ }
+}
+if (mode !== "mini") mode = "render";
 
 function apply() {
   img.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.zoom})`;
@@ -13,7 +18,8 @@ function apply() {
 function fit() {
   const w = img.naturalWidth, h = img.naturalHeight;
   if (!w) return;
-  view.zoom = Math.min(Math.max(Math.min((innerWidth - 40) / w, (innerHeight - 100) / h), LIMIT.min), 4);
+  const fitMax = img.src.endsWith(".png") ? 40 : 4; // mini maps are tiny (1 px per tile)
+  view.zoom = Math.min(Math.max(Math.min((innerWidth - 40) / w, (innerHeight - 100) / h), LIMIT.min), fitMax);
   view.x = (innerWidth - w * view.zoom) / 2;
   view.y = (innerHeight - h * view.zoom) / 2;
   apply();
@@ -37,11 +43,26 @@ function pan(dx, dy) {
 function load(id) {
   if (!(id in maps)) return;
   current = id;
-  $("title").textContent = maps[id].name || id;
-  document.title = `${maps[id].name || id} | Shuttle Viewer`;
+  const m = maps[id];
+  $("title").textContent = m.name || id;
+  document.title = `${m.name || id} | Shuttle Viewer`;
   document.querySelectorAll("#list a").forEach(a => a.classList.toggle("on", a.dataset.id === id));
+  const [first, second] = mode === "mini" ? [m.mini, m.url] : [m.url, m.mini];
   img.onload = fit;
-  img.src = maps[id].url;
+  img.src = first || second;
+  document.querySelectorAll("#mode button").forEach(b => {
+    b.classList.toggle("on", b.dataset.mode === mode);
+    b.disabled = !(b.dataset.mode === "mini" ? m.mini : m.url);
+  });
+}
+
+function setMode(m) {
+  mode = m;
+  try { localStorage.setItem("mode", m); } catch (e) { /* ignore */ }
+  const u = new URLSearchParams(location.search);
+  u.set("view", m);
+  history.replaceState("", "", "?" + u);
+  load(current);
 }
 
 function buildList(groups) {
@@ -55,11 +76,11 @@ function buildList(groups) {
       maps[id] = m;
       const a = document.createElement("a");
       a.textContent = m.name || id;
-      a.href = `?map=${encodeURIComponent(id)}`;
+      a.href = `?map=${encodeURIComponent(id)}&view=${mode}`;
       a.dataset.id = id;
       a.onclick = e => {
         e.preventDefault();
-        history.pushState("", "", a.href);
+        history.pushState("", "", `?map=${encodeURIComponent(id)}&view=${mode}`);
         load(id);
       };
       d.appendChild(a);
@@ -128,6 +149,7 @@ $("toggle").onclick = () => { $("list").hidden = !$("list").hidden; };
 $("zin").onclick = () => zoomAt(innerWidth / 2, innerHeight / 2, 1.4);
 $("zout").onclick = () => zoomAt(innerWidth / 2, innerHeight / 2, 1 / 1.4);
 $("fit").onclick = fit;
+document.querySelectorAll("#mode button").forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode)));
 addEventListener("resize", fit);
 addEventListener("popstate", () => load(new URLSearchParams(location.search).get("map")));
 

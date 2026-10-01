@@ -14,3 +14,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--
 #list a{display:block;padding:3px 8px;color:var(--fg);text-decoration:none;border-radius:3px}
 #list a:hover,#list a.on{background:#333}
 #hint{position:fixed;left:12px;right:12px;bottom:8px;margin:0;color:var(--mut);font-size:12px;pointer-events:none;text-shadow:0 0 4px #000}
+#mode{display:inline-flex}
+#mode button{min-width:0;height:36px;padding:0 12px;border-radius:0}
+#mode button:first-child{border-radius:4px 0 0 4px}
+#mode button:last-child{border-radius:0 4px 4px 0;border-left:0}
+#mode button.on{color:var(--fg);background:#333;border-color:var(--mut)}
+#mode button:disabled{opacity:.4;cursor:default}
