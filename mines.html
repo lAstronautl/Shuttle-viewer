@@ -20,19 +20,36 @@
 
 <main id="gm">
   <div class="row">
+    <span class="lbl">Поле</span>
+    <div class="seg" id="m-field">
+      <button type="button" data-f="ship">Шаттл</button>
+      <button type="button" data-f="poi">POI</button>
+      <button type="button" data-f="classic">Классика</button>
+    </div>
+  </div>
+
+  <div class="row" id="m-map-row">
+    <span class="lbl">Миникарта</span>
+    <select id="m-map" aria-label="Какую миникарту использовать"></select>
+  </div>
+
+  <div class="row">
     <span class="lbl">Сложность</span>
     <div class="seg" id="m-preset">
-      <button type="button" data-p="easy">Новичок 9x9</button>
-      <button type="button" data-p="medium">Любитель 16x16</button>
-      <button type="button" data-p="hard">Эксперт 30x16</button>
+      <button type="button" data-p="easy">Лёгкая</button>
+      <button type="button" data-p="medium">Средняя</button>
+      <button type="button" data-p="hard">Сложная</button>
       <button type="button" data-p="custom">Своё</button>
     </div>
   </div>
 
-  <div class="row" id="m-custom" hidden>
-    <label>Ширина <input id="c-w" type="number" min="5" max="50" value="12"></label>
-    <label>Высота <input id="c-h" type="number" min="5" max="30" value="12"></label>
-    <label>Мин <input id="c-m" type="number" min="1" value="20"></label>
+  <div class="row" id="m-custom-classic" hidden>
+    <label>Ширина <input id="c-w" type="number" min="5" max="50"></label>
+    <label>Высота <input id="c-h" type="number" min="5" max="30"></label>
+    <label>Мин <input id="c-m" type="number" min="1"></label>
+  </div>
+  <div class="row" id="m-custom-ship" hidden>
+    <label>Мин, % клеток <input id="c-d" type="number" min="5" max="40"></label>
   </div>
 
   <div class="hud">
@@ -45,7 +62,8 @@
 
   <div id="m-wrap"><div id="m-board" role="grid" aria-label="Игровое поле"></div></div>
   <p id="m-msg" class="note" aria-live="polite"></p>
-  <p class="note">Левая кнопка: открыть. Правая кнопка (или долгое нажатие, или режим флажка): флажок. Клик по открытой цифре с нужным числом флажков открывает соседей. Первый клик всегда безопасный.</p>
+  <p id="m-subject" class="note"></p>
+  <p class="note">Левая кнопка: открыть. Правая кнопка (или долгое нажатие, или режим флажка): флажок. Клик по открытой цифре с нужным числом флажков открывает соседей. Первый клик всегда безопасный. Поле повторяет форму миникарты шаттла или POI (один пиксель миникарты - одна клетка), открытые клетки окрашиваются её цветами.</p>
 </main>
 
 <script src="mines.js"></script>
