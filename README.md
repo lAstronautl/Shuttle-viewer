@@ -1,78 +1,56 @@
-# Shuttle Viewer
+# StarHorizon Render
 
-Статичный каталог шаттлов [StarHorizon](https://github.com/StarHorizon14/StarHorizon):
-цена, размер, класс, топливо/двигатель, спецификации и схема корабля.
+Статический сайт-каталог шаттлов и POI [StarHorizon](https://github.com/StarHorizon14/StarHorizon):
+данные, рендеры и миникарты собираются из репозитория игры.
 
-## Как это работает
-0. В каталоге есть переключатель **Верфь / POI**: точки интереса (`pointOfInterest`, ссылка `?kind=poi`) рендерятся и получают
-   миникарты так же, как шаттлы; названия берутся из ftl (`poi-*-name`). В просмотрщике они в группе «POI» (`viewer/?map=poi-<id>`),
-   в zip лежат в подпапке `POI/`. Фильтры верфи, размера, класса, генератора и цены к POI не применяются.
-1. `scripts/build_shuttles.py` читает `vessel`-прототипы StarHorizon (с наследованием от `parent`)
-   и пишет `shuttles.json`: название, цена, размер, магазин, класс, двигатель/топливо, описание.
-2. `scripts/render_shuttles.py` рендерит карту каждого шаттла (`shuttlePath`) оригинальным
-   `Content.MapRenderer` из StarHorizon (тот же рендер, что в игре) в кэш `render-cache/<sha1 карты>.webp`.
-   Перерисовываются только новые/изменённые шаттлы. `scripts/attach_renders.py` кладёт рендеры в `shuttles/img/`.
-3. `scripts/render_minimaps.py` рисует миникарты (1 пиксель = 1 тайл, как в гайдбуке) через
-   [starhorizon-map-render](https://github.com/lAstronautl/starhorizon-map-render) и кладёт их в `shuttles/mini/`.
-   В карточке можно переключаться между полным рендером и миникартой.
-4. `index.html` + `app.js` показывают карточки с поиском и фильтрами.
+## Структура
 
-## Локально
-Нужны .NET 9 SDK, Node 20, Python 3 и `pyyaml`.
+| Путь | Назначение |
+| --- | --- |
+| `index.html`, `app.js`, `style.css` | Каталог. Читает `shuttles.json`. |
+| `viewer/` | Просмотрщик изображений. Список карт в `viewer/maps.json` (в репозитории пустой, заполняется при сборке). |
+| `game.*`, `tile.*`, `mines.*` | Мини-игры. Читают `shuttles.json` и изображения из `shuttles/`. |
+| `scripts/` | Скрипты сборки данных и рендеров. |
+| `.github/workflows/` | `render.yml` (рендеры) и `pages.yml` (сайт). |
+
+Генерируемые файлы (`shuttles.json`, `shuttles/`, `render-cache/`) в git не хранятся.
+
+## Данные и скрипты
+
+| Скрипт | Что делает |
+| --- | --- |
+| `build_shuttles.py <StarHorizon> [out]` | Читает прототипы `vessel` (с наследованием `parent`) и `pointOfInterest`, названия POI берёт из ftl (`poi-*`). Пишет `shuttles.json`, у каждой карты считает `mapSha` (sha1 файла). |
+| `render_shuttles.py <StarHorizon> <cache> [out]` | Рендерит карты `Content.MapRenderer` в `<cache>/<mapSha>.webp`. Рендерит только отсутствующие; упавшие в пачке карты повторяет по одной. |
+| `attach_renders.py <cache> [out]` | Копирует рендеры в `shuttles/img/` и записывает путь в `shuttles.json`. |
+| `render_minimaps.py <StarHorizon> <map-render> [out]` | Миникарты через [starhorizon-map-render](https://github.com/lAstronautl/starhorizon-map-render) в `shuttles/mini/`. |
+| `viewer_shuttles.py <site>` | Заполняет `viewer/maps.json`. Ключи: `ship-<id>`, `poi-<id>`. |
+| `export_renders.py <cache> <out> [--only ...] [--minimaps .]` | Экспорт в zip или папку под читаемыми именами (`Рендер/`, `Миникарта/`, POI в `POI/`). |
+
+Переменные `render_shuttles.py`: `RENDER_ONLY` (id или названия через запятую), `RENDER_FORCE=true` (перерисовать), `RENDER_BATCH` (размер пачки, по умолчанию 10), `RENDER_LIMIT` (ограничение для проверки).
+
+URL-параметры: каталог `?kind=poi`; просмотрщик `viewer/?map=<ship|poi>-<id>&view=render|mini`.
+
+## Локальный запуск
+
+Нужны .NET 9 SDK, Node 20, Python 3, `pyyaml`.
+
 ```
 git clone --depth 1 --recurse-submodules --shallow-submodules https://github.com/StarHorizon14/StarHorizon.git ../StarHorizon
 (cd ../StarHorizon && dotnet build Content.MapRenderer -c Release)
-python scripts/build_shuttles.py ../StarHorizon .
-python scripts/render_shuttles.py ../StarHorizon render-cache .   # ~40 c на шаттл, первый запуск долгий
-python scripts/attach_renders.py render-cache .
 git clone --depth 1 https://github.com/lAstronautl/starhorizon-map-render.git ../starhorizon-map-render
 (cd ../starhorizon-map-render && npm ci && npm run build --workspace=renderer)
+
+python scripts/build_shuttles.py ../StarHorizon .
+python scripts/render_shuttles.py ../StarHorizon render-cache .
+python scripts/attach_renders.py render-cache .
 python scripts/render_minimaps.py ../StarHorizon ../starhorizon-map-render .
+python scripts/viewer_shuttles.py .
 python -m http.server
 ```
-`RENDER_LIMIT=N` ограничивает число шаттлов для быстрой проверки.
 
-## GitHub Actions: два workflow
-- **Render shuttles** (`.github/workflows/render.yml`) — тяжёлый: собирает `Content.MapRenderer` и рендерит карты
-  шаттлов (первый раз до ~2 часов, дальше только новые/изменённые благодаря кэшу). Результат выкладывается
-  артефактом `shuttle-renders`. Запускается по расписанию (понедельник и пятница, 04:00 UTC) и вручную.
-- **Build & deploy site** (`.github/workflows/pages.yml`) — быстрый (несколько минут): собирает `shuttles.json`,
-  берёт рендеры из последнего успешного Render shuttles, рисует миникарты и деплоит на GitHub Pages.
-  Запускается при push в `master`/`main`, автоматически после успешного Render shuttles и вручную.
-  Сам рендер шаттлов здесь никогда не выполняется.
+## GitHub Actions
 
-Render shuttles при ручном запуске принимает параметры: `ships` — id или названия шаттлов через запятую
-(например `Vagabond, hellfish`; пусто = всё, чего ещё нет в кэше) и `force` — перерисовать, даже если рендер уже есть.
-Так можно быстро перерисовать один сломанный шаттл, не дожидаясь остальных (старые рендеры берутся из кэша).
-Локально то же самое: `RENDER_ONLY=Vagabond RENDER_FORCE=true python scripts/render_shuttles.py ...`.
+- **Render shuttles** (`render.yml`): собирает `Content.MapRenderer`, рендерит карты с кэшем по `mapSha`, выкладывает артефакты `shuttle-renders` (кэш для сайта) и `shuttle-renders-named` (под читаемыми именами). Запуск: расписание (пн и пт, 04:00 UTC) и вручную. Входные параметры вручную: `ships` (какие карты рендерить), `force`. Первый запуск долгий.
+- **Build & deploy site** (`pages.yml`): собирает `shuttles.json`, берёт рендеры из последнего успешного Render shuttles, делает миникарты, публикует на GitHub Pages. Запуск: push в `master`/`main`, после успешного Render shuttles, вручную. Рендеры здесь не выполняются.
 
-## Игра (`game.html`)
-Мини-игра «угадай карту»: выбираете, что угадывать (шаттлы или POI), и сложность - лёгкая показывает обычный рендер,
-сложная миникарту. Можно играть «Шаттлы», «POI» или «Всё вместе», задать число раундов и включить режим «только случайные тайлы» (открывать только кнопкой). Картинка закрыта, пиксели (тайлы карты) открываются кликом по одному или кнопкой Случайный тайл.
-Чем меньше пикселей открыто, чем быстрее ответ и чем меньше ошибок, тем больше очков (до 1000 за раунд, на сложной x1,5).
-Число раундов и жизней (по умолчанию 1) настраивается: жизнь теряется при сдаче или когда очки раунда дошли до 0, без жизней игра кончается досрочно.  рекорд хранится в браузере отдельно для каждого режима. Данные те же `shuttles.json`, ничего дополнительно не собирается.
-
-## Угадай тайл (`tile.html`)
-Название шаттла (или POI) показано, но сам он полностью скрыт (виден лишь силуэт клеток): нужно найти тайл, показанный в отдельном окне. Клик по неверному тайлу открывает его и снимает очки; в окне 3x3 тайла искомый тайл стоит в центре, а подсказка за очки раскрывает на своём месте один из соседних тайлов. Используются полные рендеры (на миникартах тайл - просто цвет, угадать нечего), поэтому до первого запуска Render shuttles игра пуста. Раунды, жизни и сложность (множитель очков) настраиваются.
-
-## Сапёр (`mines.html`)
-Сапёр на миникартах (мины только под серыми и зелёными клетками, цифры показывают только они): поле имеет форму шаттла или POI (клетки есть только там, где у корабля есть тайл), открытые клетки окрашиваются цветами миникарты, а корабль проявляется по мере игры. Можно выбрать конкретную карту или случайную. Три уровня (процент мин) и своё поле, флажки (правая кнопка; на телефоне долгое нажатие), открытие соседей по цифре, безопасный первый клик, за победу начисляются очки (размер поля и число мин x сложность по доле мин x скорость от 0,5 до 1,5), лучшие очки и время сохраняются в браузере. Ссылка на него есть на странице игры.
-
-## Просмотрщик (`viewer/`)
-Страница `viewer/` показывает рендер шаттла на весь экран: масштаб колесом, `+`/`-` или щипком, перемещение
-перетаскиванием или WASD (по физическим клавишам, работает на любой раскладке), кнопка `[ ]` вписывает картинку в экран. Список шаттлов открывается кнопкой `#`. Кнопка «Скачать» отдаёт zip с двумя папками: `Рендер/` и `Миникарта/`.
-Файл `viewer/maps.json` пустой в репозитории: при сборке сайта `scripts/viewer_shuttles.py` заполняет его шаттлами
-(группы «Верфь: …»). Шаттл открывается по ссылке `viewer/?map=ship-<id>&view=render|mini`.
-
-## Экспорт рендеров
-- **На сайте:** переключатель «Рендер / Миникарта» вверху страницы меняет картинки у всех карточек (выбор запоминается
-  и передаётся в просмотрщик). Клик по карточке сразу открывает шаттл в просмотрщике. Скачать можно либо один шаттл
-  (ссылка «Скачать» в карточке, файл называется `<Название>.webp`), либо всё сразу кнопкой «Скачать все (zip)»
-  (`shuttle-renders.zip` со всеми рендерами и миникартами, собирается при сборке сайта).
-- **Из Actions:** Render shuttles выкладывает артефакт `shuttle-renders-named` с файлами `<Название шаттла>.webp`
-  (при запуске с `ships` — только выбранные).
-- **Локально:** `python scripts/export_renders.py render-cache out.zip [--only Vagabond,hellfish] [--minimaps .]`
-  (если `out` не оканчивается на `.zip`, файлы копируются в папку).
-
-Render shuttles по push не запускается: только по расписанию и вручную. Включить один раз: **Settings → Pages → Source: GitHub Actions**.
-Перед первым деплоем запустите Render shuttles вручную, иначе на сайте будут только миникарты.
+Один раз включить Pages: **Settings → Pages → Source: GitHub Actions**. До первого успешного Render shuttles на сайте будут только миникарты.

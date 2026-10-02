@@ -4,6 +4,8 @@ const TILE = 32;                      // one map tile in the render, px
 const MAX_W = 760, MAX_H = 600;       // map canvas limit, css px
 const START = 1000, TIME_MAX = 300, TIME_FULL = 90;
 const WRONG = 100, HINT = 150, HARD_MULT = 1.5;
+const TEMP_COLOR = { 3: "#d98a8a", 2: "#d9a066", 1: "#7fb2e5", 0: "#6f7f95" };
+const TEMP_LABEL = { 3: "Горячо", 2: "Тепло", 1: "Прохладно", 0: "Холодно" };
 const HIDDEN = "#262626"; // unopened tiles: a solid silhouette, the picture is fully hidden on any difficulty
 
 const prefs = { kind: "ship", diff: "easy", custom: false, rounds: 5, lives: 1 };
@@ -116,6 +118,17 @@ function pickTarget(a) {
 }
 
 // window 3x3: the target tile in the centre, neighbours only when revealed by hints
+// hard mode: how close a clicked tile is to the target (3 hot .. 0 cold), scaled by the map size
+function temperature(i) {
+  const { cols, rows } = r.a;
+  const d = Math.hypot((i % cols) - (r.target % cols), Math.floor(i / cols) - Math.floor(r.target / cols));
+  const s = Math.max(cols, rows);
+  if (d <= 1.5) return 3;
+  if (d <= Math.max(3.2, 0.2 * s)) return 2;
+  if (d <= Math.max(6.5, 0.4 * s)) return 1;
+  return 0;
+}
+
 function drawWindow() {
   const cv = $("target"), ctx = cv.getContext("2d"), t = cv.width / 3;
   const { a, img } = r, tx = r.target % a.cols, ty = Math.floor(r.target / a.cols);
@@ -123,7 +136,10 @@ function drawWindow() {
   for (let dy = -1; dy <= 1; dy++) {
     for (let dx = -1; dx <= 1; dx++) {
       const x = tx + dx, y = ty + dy, px = (dx + 1) * t, py = (dy + 1) * t;
-      const shown = (!dx && !dy) || r.hinted.includes(y * a.cols + x);
+      const inMap = x >= 0 && y >= 0 && x < a.cols && y < a.rows;
+      const idx = y * a.cols + x;
+      // the centre is hidden on hard until the round ends; neighbours show up when hinted or already opened by a click
+      const shown = (!dx && !dy) ? (!r.hard || r.done) : inMap && (r.hinted.includes(idx) || r.opened[idx] === 1);
       ctx.fillStyle = shown ? "#0e0e0e" : "#1a1a1a";
       ctx.fillRect(px, py, t, t);
       if (shown && x >= 0 && y >= 0 && x < a.cols && y < a.rows) {
@@ -179,8 +195,10 @@ async function startRound() {
   r = {
     item, img, a, target, scale, cs: TILE * scale, opened: new Uint8Array(a.cols * a.rows),
     wrong: 0, hints: 0, hinted: [], done: false, hover: -1, start: performance.now(), end: 0,
-    hard: prefs.diff === "hard",
+    hard: prefs.diff === "hard", temp: {},
   };
+  $("t-hint").hidden = r.hard;
+  $("t-cold").hidden = !r.hard;
   drawWindow();
   $("t-name").textContent = item.name;
   $("g-msg").textContent = "";
@@ -243,8 +261,8 @@ function draw() {
 
   for (let i = 0; i < r.opened.length; i++) {
     if (!r.opened[i] || r.done) continue;
-    ctx.strokeStyle = "#d98a8a";
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = r.hard ? TEMP_COLOR[r.temp[i]] : "#d98a8a";
+    ctx.lineWidth = r.hard ? 3 : 2;
     ctx.strokeRect((i % a.cols) * cs + 1, Math.floor(i / a.cols) * cs + 1, cs - 2, cs - 2);
   }
 
@@ -277,12 +295,18 @@ $("cv").addEventListener("click", e => {
   if (!r || r.done) return;
   const i = cellAt(e);
   if (i < 0 || r.a.empty[i] || r.opened[i]) return;
-  if (r.a.keys[i] === r.a.keys[r.target]) { r.opened[i] = 1; endRound(true); return; }
+  if (i === r.target) { r.opened[i] = 1; endRound(true); return; }
   r.opened[i] = 1;
   r.wrong++;
   const m = $("g-msg");
   m.className = "note bad";
-  m.textContent = `Не тот тайл, он открыт. Минус ${WRONG} очков.`;
+  if (r.hard) {
+    r.temp[i] = temperature(i);
+    m.textContent = `${TEMP_LABEL[r.temp[i]]}. Очки сняты.`;
+  } else {
+    m.textContent = `Не тот тайл, он открыт. Очки сняты.`;
+  }
+  drawWindow();
   draw();
   hud();
 });
@@ -307,8 +331,7 @@ $("t-hint").onclick = () => {
   r.hinted.push((ty + dy) * cols + tx + dx);
   r.hints++;
   drawWindow();
-  $("g-msg").className = "note";
-  $("g-msg").textContent = `Подсказка: раскрыт соседний тайл, минус ${HINT} очков.`;
+  $("g-msg").textContent = "";
   if (options.length === 1) $("t-hint").disabled = true;
   hud();
 };
@@ -330,6 +353,7 @@ function endRound(won, reason) {
   g.log.push({ name: r.item.name, pts });
   $("cv").className = "done";
   draw();
+  drawWindow();
   hud();
   setControls(false);
 
