@@ -124,7 +124,7 @@ function card(s) {
   (s.engine || []).forEach(t => tags.appendChild(el("span", "tag fuel", t)));
 
   const body = el("div", "body");
-  body.append(top, el("div", "desc", s.descriptionRu || s.description), tags);
+  body.append(top, el("div", "desc", s.description), tags);
   c.append(img, body);
   return c;
 }
@@ -138,7 +138,7 @@ function render() {
     return;
   }
   const list = all.filter(s =>
-    (!q || (s.name + " " + s.description + " " + (s.descriptionRu || "")).toLowerCase().includes(q)) &&
+    (!q || (s.name + " " + s.description).toLowerCase().includes(q)) &&
     s.price >= price.lo && s.price <= price.hi &&
     multi.group.has(s.group) && (!multi.category.size || multi.category.has(s.category)) &&
     [...multi.cls].every(x => s.class.includes(x)) &&

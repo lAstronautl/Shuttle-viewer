@@ -1,5 +1,11 @@
 body.game header{position:static}
-#gm{max-width:900px;margin:0 auto;padding:16px}
+#gm{max-width:900px;margin:16px auto;padding:20px;background:var(--card);border:1px solid var(--line);border-radius:8px}
+@media(max-width:940px){#gm{margin:12px;padding:14px}}
+#modes{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+#modes a,#modes .soon{padding:7px 16px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--mut);text-decoration:none}
+#modes a:hover{border-color:var(--mut);color:var(--fg)}
+#modes a.on{background:#333;border-color:var(--mut);color:var(--fg)}
+#modes .soon{opacity:.5;border-style:dashed;cursor:default}
 .btn{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:6px 14px;color:var(--fg);text-decoration:none}
 .btn:hover{border-color:var(--mut)}
 .lead{color:var(--mut);margin-top:0}

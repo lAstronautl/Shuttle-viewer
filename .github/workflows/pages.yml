@@ -71,7 +71,7 @@ jobs:
       - name: Assemble site
         run: |
           mkdir _site
-          cp -r index.html style.css app.js game.html game.css game.js mines.html mines.css mines.js icon.png shuttles.json shuttles viewer _site/
+          cp -r index.html style.css app.js game.html game.css game.js mines.html mines.css mines.js tile.html tile.css tile.js icon.png shuttles.json shuttles viewer _site/
           python scripts/viewer_shuttles.py _site
           python scripts/export_renders.py render-cache _site/shuttle-renders.zip --minimaps . || true
       - uses: actions/upload-pages-artifact@v3

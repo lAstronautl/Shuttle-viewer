@@ -1,0 +1,9 @@
+#tplay{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+#tplay #board{flex:1 1 420px;min-width:0}
+#side{flex:0 0 220px;display:flex;flex-direction:column;gap:12px}
+.win{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:10px}
+.win h3{margin:0 0 8px;font-size:13px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+#target{display:block;width:192px;height:192px;margin:0 auto 10px;image-rendering:pixelated;background:#111;border:1px solid var(--line)}
+#t-hint,#t-giveup{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:7px 12px;font:inherit;cursor:pointer;width:100%}
+#t-hint:hover:not(:disabled),#t-giveup:hover:not(:disabled){border-color:var(--mut)}
+#t-name{margin:0 0 10px;font-size:20px}

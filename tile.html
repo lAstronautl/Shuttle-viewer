@@ -7,6 +7,7 @@
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="game.css">
+<link rel="stylesheet" href="tile.css">
 </head>
 <body class="game">
 <header>
@@ -15,9 +16,9 @@
     <a class="btn" href="./">К каталогу</a>
   </div>
   <nav id="modes" aria-label="Режимы игры">
-    <a href="game.html" class="on" aria-current="page">Угадай карту</a>
+    <a href="game.html">Угадай карту</a>
     <a href="mines.html">Сапёр</a>
-    <a href="tile.html">Угадай тайл</a>
+    <a href="tile.html" class="on" aria-current="page">Угадай тайл</a>
   </nav>
 </header>
 
@@ -36,7 +37,7 @@
       <span class="lbl">Сложность</span>
       <div class="seg" id="s-diff">
         <button type="button" data-diff="easy">Лёгкая</button>
-        <button type="button" data-diff="hard">Сложная</button>
+        <button type="button" data-diff="hard">Сложная: очки x1,5</button>
       </div>
     </div>
 
@@ -50,10 +51,6 @@
       <input id="s-lives" type="number" min="1" max="10" step="1" inputmode="numeric" aria-label="Количество жизней">
     </div>
 
-    <label class="row chk" id="s-random-row">
-      <input type="checkbox" id="s-random"> Только случайные тайлы (кликом открывать нельзя)
-    </label>
-
     <label class="row chk" id="s-custom-row">
       <input type="checkbox" id="s-custom"> Включать шаттлы верфи Custom
     </label>
@@ -63,14 +60,15 @@
     <button id="start" class="primary" type="button">Начать игру</button>
 
     <details class="rules">
-      <summary>Как считаются очки</summary>
+      <summary>Правила и очки</summary>
       <ul>
-        <li>До 700 очков за малое число открытых пикселей: чем больше открыто, тем быстрее они тают.</li>
-        <li>До 300 очков за скорость: за 90 секунд уходят полностью.</li>
-        <li>Каждая ошибка стоит 75 очков.</li>
+        <li>В окне справа виден участок карты 3x3 тайла, в центре которого искомый тайл (32x32); соседние тайлы скрыты. Найдите центральный тайл на карте и кликните по нему.</li>
+        <li>Название корабля показано сверху, но сам он скрыт: виден только однотонный силуэт клеток, на любой сложности. Клик по неверному тайлу открывает его, но снимает 100 очков.</li>
+        <li>Подсказка стоит 150 очков: в том же окне раскрывается один из соседних с искомым тайлов, на своём месте.</li>
+        <li>Раунд стоит 1000 очков. Ещё до 300 очков уходят за время: за 90 секунд они сгорают полностью.</li>
         <li>Сложная сложность умножает результат на 1,5.</li>
-        <li>Жизнь теряется, если нажать «Сдаться» или если очки за раунд дошли до 0 (тогда раунд заканчивается сам). Когда жизней не осталось, игра заканчивается досрочно, а шаттл показывается.</li>
-        <li>Количество раундов задаётся в настройках. Сдаться можно в любой момент (0 очков за раунд).</li>
+        <li>Жизнь теряется, если нажать "Сдаться" или очки за раунд дошли до 0. Когда жизней не осталось, игра заканчивается досрочно.</li>
+        <li>Одинаковые на вид тайлы считаются одним и тем же: засчитывается любой, совпадающий с искомым. Для загадки выбираются заметные тайлы, которых на карте больше нет.</li>
       </ul>
     </details>
   </section>
@@ -79,21 +77,26 @@
     <div class="hud">
       <span>Раунд <b id="h-round">1/5</b></span>
       <span>Жизни <b id="h-lives">1</b></span>
-      <span>Открыто <b id="h-px">0</b></span>
+      <span>Ошибок <b id="h-wrong">0</b></span>
+      <span>Подсказок <b id="h-hints">0</b></span>
       <span>Время <b id="h-time">0</b> с</span>
       <span>Всего <b id="h-score">0</b></span>
       <span class="now">Очки <b id="h-now">0</b></span>
     </div>
 
-    <div id="board"><canvas id="cv"></canvas></div>
+    <h2 id="t-name"></h2>
+    <div id="tplay">
+      <div id="board"><canvas id="cv"></canvas></div>
 
-    <form id="guess" autocomplete="off">
-      <input id="g-input" list="g-names" placeholder="Название..." aria-label="Ваш ответ">
-      <datalist id="g-names"></datalist>
-      <button type="submit" class="primary">Угадать</button>
-      <button type="button" id="g-random">Случайный тайл</button>
-      <button type="button" id="g-giveup">Сдаться</button>
-    </form>
+      <aside id="side">
+        <div class="win">
+          <h3>Найди тайл</h3>
+          <canvas id="target" width="192" height="192"></canvas>
+          <button id="t-hint" type="button">Подсказка: открыть соседний тайл (минус 150)</button>
+        </div>
+        <button id="t-giveup" type="button">Сдаться</button>
+      </aside>
+    </div>
     <p id="g-msg" class="note" aria-live="polite"></p>
 
     <div id="result" hidden>
@@ -113,6 +116,6 @@
   </section>
 </main>
 
-<script src="game.js"></script>
+<script src="tile.js"></script>
 </body>
 </html>

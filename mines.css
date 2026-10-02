@@ -1,5 +1,5 @@
-#m-custom-classic label,#m-custom-ship label{color:var(--mut)}
-#m-custom-classic input,#m-custom-ship input{width:80px;margin-left:6px}
+#m-custom-ship label{color:var(--mut)}
+#m-custom-ship input{width:80px;margin-left:6px}
 #m-wrap{overflow:auto;background:#111;border:1px solid var(--line);border-radius:6px;padding:10px}
 #m-board{display:grid;gap:2px;width:max-content;margin:0 auto;user-select:none;-webkit-user-select:none;touch-action:manipulation}
 .mc{width:var(--c,28px);height:var(--c,28px);padding:0;border:1px solid var(--line);border-radius:3px;background:#333;color:var(--fg);font:700 15px/1 system-ui,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative}
@@ -13,7 +13,5 @@
 .mc.mine.boom{background:#6a2d2d}
 .mc.wrong{background:#4a3030}
 .mc.wrong::after{content:"";position:absolute;left:4px;right:4px;top:50%;height:2px;background:#e08a8a;transform:rotate(45deg)}
-#m-flagmode{background:var(--card);color:var(--mut);border:1px solid var(--line);border-radius:4px;padding:6px 12px;font:inherit;cursor:pointer;margin-right:8px}
-#m-flagmode[aria-pressed=true]{color:var(--fg);border-color:var(--mut);background:#333}
 .mg{width:var(--c,28px);height:var(--c,28px)}
 #m-subject a{color:var(--acc)}

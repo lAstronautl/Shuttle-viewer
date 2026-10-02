@@ -61,26 +61,6 @@ def main():
         merged.update({k: v for k, v in d.items() if k not in ("abstract",)})
         return merged
 
-    guides = {d["id"]: d.get("text") for _, d in protos(root, "guideEntry")}
-    cyrillic = re.compile("[А-Яа-яЁё]")
-    quote = re.compile(r'^\s*"(.{10,})"\s*$')
-
-    def guide_description(page):
-        """The localized (Russian) shuttle description: the quoted line in the shuttle's guidebook page."""
-        path = guides.get(page) if page else None
-        xml = root / "Resources" / path.lstrip("/") if path else None
-        if not xml or not xml.exists():
-            return None
-        for line in xml.read_text(encoding="utf-8").splitlines():
-            m = quote.match(line)
-            if m and cyrillic.search(m.group(1)):
-                return m.group(1).strip()
-        return None
-
-    # manual Russian descriptions for shuttles that have no localization in StarHorizon: {"<vessel id>": "text"}
-    overrides_file = Path(__file__).with_name("descriptions_ru.json")
-    overrides = json.loads(overrides_file.read_text(encoding="utf-8")) if overrides_file.exists() else {}
-
     shuttles = []
     for vid, (path, raw) in vessels.items():
         if raw.get("abstract"):
@@ -100,9 +80,6 @@ def main():
             "access": d.get("access") or None,
             "image": None,  # filled in by render_shuttles.py
         }
-        ru = overrides.get(vid) or (None if cyrillic.search(s["description"]) else guide_description(d.get("guidebookPage")))
-        if ru:
-            s["descriptionRu"] = ru
         map_file = root / "Resources" / str(d["shuttlePath"]).lstrip("/")
         if map_file.exists():
             s["mapFile"] = str(d["shuttlePath"])

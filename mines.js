@@ -1,19 +1,18 @@
 const $ = id => document.getElementById(id);
 
 // Field "ship": the board has the shape of a shuttle / POI mini map (1 mini map pixel = 1 cell), cells are tinted
-// with the mini map colours when opened. Field "classic": a plain rectangle.
+// with the mini map colours when opened. Mines sit only under grey and green cells, and only those cells show numbers.
 const DENSITY = { easy: 0.12, medium: 0.17, hard: 0.22 };
-const CLASSIC = { easy: [9, 9, 10], medium: [16, 16, 40], hard: [30, 16, 99] };
 const LONG_PRESS_MS = 420;
 const RANDOM_MAX = { w: 60, h: 40 }; // "random map" skips mini maps bigger than this
 
-const prefs = { field: "ship", preset: "easy", mapId: "", density: 15, w: 12, h: 12, m: 20 };
+const prefs = { field: "ship", preset: "easy", mapId: "", density: 15 };
 try { Object.assign(prefs, JSON.parse(localStorage.getItem("minesPrefs") || "{}")); } catch (e) { /* ignore */ }
 const save = () => { try { localStorage.setItem("minesPrefs", JSON.stringify(prefs)); } catch (e) { /* ignore */ } };
 
 let data = null;             // shuttles.json
-let W, H, M, valid, tint;    // board size, mines, valid[i] (cell exists), tint[i] = [r,g,b]
-let cells, state, flagMode = false, subject = null;
+let W, H, M, valid, tint, numbered; // numbered[i]: grey/green cell (can hold a mine, shows a number)
+let cells, state, subject = null;
 let t0 = 0, timer = null, opened = 0, flags = 0, validCount = 0, token = 0;
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, Math.floor(+v) || a));
@@ -31,8 +30,23 @@ function mapChoices() {
 }
 
 function bestKey() {
-  const f = prefs.field === "classic" && prefs.preset === "custom" ? `c${prefs.w}x${prefs.h}x${prefs.m}` : prefs.preset;
-  return `minesBest:${prefs.field}:${f}`;
+  return `minesBest:${prefs.field}:${prefs.preset}`;
+}
+function scoreKey() { return `minesScore:${prefs.field}:${prefs.preset}`; }
+function getBestScore() { try { return +localStorage.getItem(scoreKey()) || 0; } catch (e) { return 0; } }
+function bestLine() {
+  const t = getBest(), p = getBestScore();
+  return [p ? `Рекорд очков: ${p}` : "", t ? `лучшее время: ${t} с` : ""].filter(Boolean).join(", ");
+}
+
+// score = size part (cells and mines) x difficulty (mine density) x speed (0.5 .. 1.5 against a par time)
+function calcScore(secs) {
+  const density = M / Math.max(1, numbered.reduce((a, b) => a + b, 0));
+  const diff = Math.max(0.5, Math.min(2.5, density / 0.12));   // 12% = x1, 22% = x1.83
+  const base = validCount * 5 + M * 25;
+  const par = M * 3 + validCount * 0.5;                          // seconds for an average run
+  const speed = 0.5 + Math.max(0, 1 - secs / par);
+  return { score: Math.round(base * diff * speed), base, diff, speed, par };
 }
 function getBest() { try { return +localStorage.getItem(bestKey()) || 0; } catch (e) { return 0; } }
 
@@ -51,18 +65,15 @@ function neighbors(i) {
 /* ---------- setup ---------- */
 
 function syncSetup() {
-  const ship = prefs.field !== "classic";
   document.querySelectorAll("#m-field button").forEach(b => b.classList.toggle("on", b.dataset.f === prefs.field));
   document.querySelectorAll("#m-preset button").forEach(b => b.classList.toggle("on", b.dataset.p === prefs.preset));
-  $("m-map-row").hidden = !ship;
-  $("m-custom-classic").hidden = ship || prefs.preset !== "custom";
-  $("m-custom-ship").hidden = !ship || prefs.preset !== "custom";
-  $("m-preset").querySelector('[data-p=easy]').textContent = ship ? "Лёгкая 12%" : "Новичок 9x9";
-  $("m-preset").querySelector('[data-p=medium]').textContent = ship ? "Средняя 17%" : "Любитель 16x16";
-  $("m-preset").querySelector('[data-p=hard]').textContent = ship ? "Сложная 22%" : "Эксперт 30x16";
-  for (const [id, key] of [["c-w", "w"], ["c-h", "h"], ["c-m", "m"], ["c-d", "density"]]) $(id).value = prefs[key];
+  $("m-custom-ship").hidden = prefs.preset !== "custom";
+  $("m-preset").querySelector('[data-p=easy]').textContent = "Лёгкая 12%";
+  $("m-preset").querySelector('[data-p=medium]').textContent = "Средняя 17%";
+  $("m-preset").querySelector('[data-p=hard]').textContent = "Сложная 22%";
+  $("c-d").value = prefs.density;
 
-  if (ship && data) {
+  if (data) {
     const sel = $("m-map"), list = mapChoices();
     const want = list.some(s => `${s.kind}-${s.id}` === prefs.mapId) ? prefs.mapId : "";
     sel.replaceChildren(Object.assign(document.createElement("option"), { value: "", textContent: "Случайная" }),
@@ -83,6 +94,13 @@ function loadMini(src) {
   });
 }
 
+// mini map palette: grey (floor/walls/space) and green (rooms) take mines and numbers; orange, blue, yellow do not
+function isGreyOrGreen([r, g, b]) {
+  const spread = Math.max(r, g, b) - Math.min(r, g, b);
+  if (spread < 45) return true;                       // grey
+  return g > r + 40 && g > b + 40;                     // green
+}
+
 async function shapeOf(item) {
   const im = await loadMini(item.minimap);
   const c = document.createElement("canvas");
@@ -94,7 +112,9 @@ async function shapeOf(item) {
   for (let i = 0; i < ok.length; i++) {
     if (px[i * 4 + 3] > 10) { ok[i] = 1; col[i] = [px[i * 4], px[i * 4 + 1], px[i * 4 + 2]]; }
   }
-  return { w: c.width, h: c.height, ok, col };
+  const num = new Uint8Array(ok.length);
+  for (let i = 0; i < ok.length; i++) if (ok[i]) num[i] = isGreyOrGreen(col[i]) ? 1 : 0;
+  return { w: c.width, h: c.height, ok, col, num };
 }
 
 function pickItem() {
@@ -112,14 +132,7 @@ async function newGame() {
   syncSetup();
   subject = null;
 
-  if (prefs.field === "classic") {
-    [W, H, M] = prefs.preset === "custom"
-      ? [clamp(prefs.w, 5, 50), clamp(prefs.h, 5, 30), 0]
-      : CLASSIC[prefs.preset];
-    if (prefs.preset === "custom") M = clamp(prefs.m, 1, W * H - 9);
-    valid = new Uint8Array(W * H).fill(1);
-    tint = null;
-  } else {
+  {
     if (!data) { $("m-msg").textContent = "Загрузка..."; return; }
     let item = pickItem();
     if (!item) {
@@ -137,10 +150,10 @@ async function newGame() {
     try { shape = await shapeOf(item); } catch (e) { $("m-msg").textContent = e.message; return; }
     if (my !== token) return;
     subject = item;
-    W = shape.w; H = shape.h; valid = shape.ok; tint = shape.col;
-    const count = valid.reduce((a, b) => a + b, 0);
+    W = shape.w; H = shape.h; valid = shape.ok; tint = shape.col; numbered = shape.num;
+    const count = numbered.reduce((a, b) => a + b, 0);
     const dens = prefs.preset === "custom" ? clamp(prefs.density, 5, 40) / 100 : DENSITY[prefs.preset];
-    M = Math.max(1, Math.min(count - 10, Math.round(count * dens)));
+    M = Math.max(1, Math.min(Math.max(1, count - 10), Math.round(count * dens)));
   }
 
   validCount = valid.reduce((a, b) => a + b, 0);
@@ -148,7 +161,7 @@ async function newGame() {
   state = "ready"; opened = 0; flags = 0;
   $("m-time").textContent = "0";
   const best = getBest();
-  $("m-best").textContent = best ? `Лучшее время: ${best} с` : "";
+  $("m-best").textContent = bestLine();
 
   const board = $("m-board");
   const size = Math.max(14, Math.min(32, Math.floor(($("m-wrap").clientWidth - 24 - 2 * (W - 1)) / W)));
@@ -170,7 +183,7 @@ async function newGame() {
 function placeMines(safe) {
   const banned = new Set([safe, ...neighbors(safe)]);
   const all = [];
-  for (let i = 0; i < cells.length; i++) if (valid[i]) all.push(i);
+  for (let i = 0; i < cells.length; i++) if (valid[i] && numbered[i]) all.push(i);
   let pool = all.filter(i => !banned.has(i));
   if (pool.length < M) pool = all.filter(i => i !== safe);
   for (let k = pool.length - 1; k > 0; k--) {
@@ -178,17 +191,17 @@ function placeMines(safe) {
     [pool[k], pool[j]] = [pool[j], pool[k]];
   }
   pool.slice(0, M).forEach(i => { cells[i].mine = true; });
-  all.forEach(i => { cells[i].n = neighbors(i).filter(j => cells[j].mine).length; });
+  cells.forEach((c, i) => { if (valid[i]) c.n = neighbors(i).filter(j => cells[j].mine).length; });
 }
 
 function paint(i, full) {
   if (!valid[i]) return;
   const c = cells[i], el = $("m-board").children[i];
   let cls = "mc";
-  if (c.open) cls += ` open${c.mine ? " mine" : c.n ? ` n${c.n}` : ""}`;
+  if (c.open) cls += ` open${c.mine ? " mine" : numbered[i] && c.n ? ` n${c.n}` : ""}`;
   else if (c.flag) cls += " flag";
   el.className = cls;
-  el.textContent = c.open && !c.mine && c.n ? c.n : "";
+  el.textContent = c.open && !c.mine && numbered[i] && c.n ? c.n : "";
   if (tint && c.open && !c.mine) {
     const k = full ? 1 : 0.5, [r, g, b] = tint[i];
     el.style.background = `rgb(${Math.round(r * k + 28 * (1 - k))},${Math.round(g * k + 28 * (1 - k))},${Math.round(b * k + 28 * (1 - k))})`;
@@ -207,7 +220,7 @@ function reveal(start) {
     if (c.open || c.flag) continue;
     c.open = true; opened++;
     paint(i);
-    if (!c.mine && c.n === 0) stack.push(...neighbors(i));
+    if (!c.mine && numbered[i] && c.n === 0) stack.push(...neighbors(i));
   }
 }
 
@@ -227,7 +240,7 @@ function open(i) {
 
 function chord(i) {
   const c = cells[i];
-  if (state !== "play" || !c.open || !c.n) return;
+  if (state !== "play" || !c.open || !c.n || !numbered[i]) return;
   const around = neighbors(i);
   if (around.filter(j => cells[j].flag).length !== c.n) return;
   for (const j of around) {
@@ -279,12 +292,16 @@ function checkWin() {
   cells.forEach((c, i) => paint(i, true));
   updateLeft();
   const secs = Math.max(1, Math.round((performance.now() - t0) / 1000));
-  const best = getBest();
-  const record = !best || secs < best;
-  if (record) { try { localStorage.setItem(bestKey(), String(secs)); } catch (e) { /* ignore */ } }
-  $("m-best").textContent = `Лучшее время: ${record ? secs : best} с`;
+  const sc = calcScore(secs);
+  const bestT = getBest(), bestP = getBestScore();
+  try {
+    if (!bestT || secs < bestT) localStorage.setItem(bestKey(), String(secs));
+    if (sc.score > bestP) localStorage.setItem(scoreKey(), String(sc.score));
+  } catch (e) { /* ignore */ }
+  $("m-best").textContent = bestLine();
   $("m-msg").className = "note good";
-  $("m-msg").textContent = `Победа за ${secs} с${record ? ". Новый рекорд!" : "."}`;
+  $("m-msg").textContent = `Победа за ${secs} с: ${sc.score} очков (размер ${sc.base} x сложность ${sc.diff.toFixed(2)} x скорость ${sc.speed.toFixed(2)})`
+    + (sc.score > bestP ? ". Новый рекорд!" : ".");
   describe();
 }
 
@@ -310,14 +327,11 @@ board.addEventListener("pointerup", e => {
   if (i < 0 || i !== p.i || p.long) return;
   if (p.type === "mouse") {
     if (p.button === 0) {
-      if (flagMode) toggleFlag(i);
-      else if (cells[i].open) chord(i);
+      if (cells[i].open) chord(i);
       else open(i);
     } else if (p.button === 1) {
       chord(i);
     }
-  } else if (flagMode) {
-    toggleFlag(i);
   } else if (cells[i].open) {
     chord(i);
   } else {
@@ -333,25 +347,18 @@ board.addEventListener("contextmenu", e => {
 });
 board.addEventListener("auxclick", e => e.preventDefault());
 
-$("m-flagmode").onclick = () => {
-  flagMode = !flagMode;
-  $("m-flagmode").setAttribute("aria-pressed", flagMode);
-  $("m-flagmode").textContent = "Режим флажка: " + (flagMode ? "вкл" : "выкл");
-};
 $("m-new").onclick = newGame;
 document.querySelectorAll("#m-field button").forEach(b => b.onclick = () => {
   prefs.field = b.dataset.f; prefs.mapId = ""; save(); newGame();
 });
 document.querySelectorAll("#m-preset button").forEach(b => b.onclick = () => { prefs.preset = b.dataset.p; save(); newGame(); });
 $("m-map").onchange = e => { prefs.mapId = e.target.value; save(); newGame(); };
-for (const [id, key] of [["c-w", "w"], ["c-h", "h"], ["c-m", "m"], ["c-d", "density"]]) {
-  $(id).onchange = e => { prefs[key] = +e.target.value; save(); newGame(); };
-}
+$("c-d").onchange = e => { prefs.density = +e.target.value; save(); newGame(); };
 document.addEventListener("keydown", e => { if (e.code === "KeyR" && !(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) newGame(); });
 
-if (!["ship", "poi", "classic"].includes(prefs.field)) prefs.field = "ship";
+if (!["ship", "poi"].includes(prefs.field)) prefs.field = "ship";
 if (!["easy", "medium", "hard", "custom"].includes(prefs.preset)) prefs.preset = "easy";
 
 fetch("shuttles.json").then(r => r.json()).then(d => { data = d; })
-  .catch(() => { if (prefs.field !== "classic") { prefs.field = "classic"; } })
+  .catch(() => { $("m-msg").textContent = "Не удалось загрузить shuttles.json"; })
   .finally(() => newGame());

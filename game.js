@@ -6,7 +6,7 @@ const TIME_FULL = 90;                 // seconds after which the speed bonus is 
 const WRONG = 75;                     // penalty for a wrong answer
 const HARD_MULT = 1.5;
 
-const prefs = { kind: "ship", diff: "easy", custom: false, rounds: 5, random: false, lives: 1 };
+const prefs = { kind: "ship", diff: "easy", custom: false, rounds: 5, random: true, lives: 1 };
 try { Object.assign(prefs, JSON.parse(localStorage.getItem("gamePrefs") || "{}")); } catch (e) { /* ignore */ }
 
 let data = null;
@@ -55,9 +55,8 @@ function refreshSetup() {
   $("s-rounds").value = prefs.rounds;
   prefs.lives = Math.max(1, Math.min(10, Math.floor(prefs.lives) || 1));
   $("s-lives").value = prefs.lives;
-  $("s-info").textContent = n
-    ? `Доступно картинок в этом режиме: ${n}.` + (prefs.rounds > n ? ` Раундов будет ${n}: больше картинок нет.` : "")
-    : "Для этого режима пока нет картинок (рендеры ещё не собраны).";
+  $("s-info").textContent = !n ? "Для этого режима пока нет картинок (рендеры ещё не собраны)."
+    : prefs.rounds > n ? `Раундов будет ${n}: больше картинок нет.` : "";
   const best = getBest();
   $("s-best").textContent = best ? `Ваш рекорд в этом режиме: ${best}.` : "";
   $("start").disabled = n === 0;
