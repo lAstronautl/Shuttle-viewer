@@ -1,7 +1,7 @@
 const $ = id => document.getElementById(id);
 
 // Field "ship": the board has the shape of a shuttle / POI mini map (1 mini map pixel = 1 cell), cells are tinted
-// with the mini map colours when opened. Mines sit only under grey and green cells, and only those cells show numbers.
+// with the mini map colours when opened. Mines can be on any cell; all cells open the classic way.
 const DENSITY = { easy: 0.12, medium: 0.17, hard: 0.22 };
 const LONG_PRESS_MS = 420;
 const RANDOM_MAX = { w: 60, h: 40 }; // "random map" skips mini maps bigger than this
@@ -11,7 +11,7 @@ try { Object.assign(prefs, JSON.parse(localStorage.getItem("minesPrefs") || "{}"
 const save = () => { try { localStorage.setItem("minesPrefs", JSON.stringify(prefs)); } catch (e) { /* ignore */ } };
 
 let data = null;             // shuttles.json
-let W, H, M, valid, tint, numbered; // numbered[i]: grey/green cell (can hold a mine, shows a number)
+let W, H, M, valid, tint; // board size, mines, valid[i] (cell exists), tint[i] = [r,g,b]
 let cells, state, subject = null;
 let t0 = 0, timer = null, opened = 0, flags = 0, validCount = 0, token = 0;
 
@@ -41,7 +41,7 @@ function bestLine() {
 
 // score = size part (cells and mines) x difficulty (mine density) x speed (0.5 .. 1.5 against a par time)
 function calcScore(secs) {
-  const density = M / Math.max(1, numbered.reduce((a, b) => a + b, 0));
+  const density = M / Math.max(1, validCount);
   const diff = Math.max(0.5, Math.min(2.5, density / 0.12));   // 12% = x1, 22% = x1.83
   const base = validCount * 5 + M * 25;
   const par = M * 3 + validCount * 0.5;                          // seconds for an average run
@@ -94,13 +94,6 @@ function loadMini(src) {
   });
 }
 
-// mini map palette: grey (floor/walls/space) and green (rooms) take mines and numbers; orange, blue, yellow do not
-function isGreyOrGreen([r, g, b]) {
-  const spread = Math.max(r, g, b) - Math.min(r, g, b);
-  if (spread < 45) return true;                       // grey
-  return g > r + 40 && g > b + 40;                     // green
-}
-
 async function shapeOf(item) {
   const im = await loadMini(item.minimap);
   const c = document.createElement("canvas");
@@ -112,9 +105,7 @@ async function shapeOf(item) {
   for (let i = 0; i < ok.length; i++) {
     if (px[i * 4 + 3] > 10) { ok[i] = 1; col[i] = [px[i * 4], px[i * 4 + 1], px[i * 4 + 2]]; }
   }
-  const num = new Uint8Array(ok.length);
-  for (let i = 0; i < ok.length; i++) if (ok[i]) num[i] = isGreyOrGreen(col[i]) ? 1 : 0;
-  return { w: c.width, h: c.height, ok, col, num };
+  return { w: c.width, h: c.height, ok, col };
 }
 
 function pickItem() {
@@ -150,8 +141,8 @@ async function newGame() {
     try { shape = await shapeOf(item); } catch (e) { $("m-msg").textContent = e.message; return; }
     if (my !== token) return;
     subject = item;
-    W = shape.w; H = shape.h; valid = shape.ok; tint = shape.col; numbered = shape.num;
-    const count = numbered.reduce((a, b) => a + b, 0);
+    W = shape.w; H = shape.h; valid = shape.ok; tint = shape.col;
+    const count = valid.reduce((a, b) => a + b, 0);
     const dens = prefs.preset === "custom" ? clamp(prefs.density, 5, 40) / 100 : DENSITY[prefs.preset];
     M = Math.max(1, Math.min(Math.max(1, count - 10), Math.round(count * dens)));
   }
@@ -183,7 +174,7 @@ async function newGame() {
 function placeMines(safe) {
   const banned = new Set([safe, ...neighbors(safe)]);
   const all = [];
-  for (let i = 0; i < cells.length; i++) if (valid[i] && numbered[i]) all.push(i);
+  for (let i = 0; i < cells.length; i++) if (valid[i]) all.push(i);
   let pool = all.filter(i => !banned.has(i));
   if (pool.length < M) pool = all.filter(i => i !== safe);
   for (let k = pool.length - 1; k > 0; k--) {
@@ -198,10 +189,10 @@ function paint(i, full) {
   if (!valid[i]) return;
   const c = cells[i], el = $("m-board").children[i];
   let cls = "mc";
-  if (c.open) cls += ` open${c.mine ? " mine" : numbered[i] && c.n ? ` n${c.n}` : ""}`;
+  if (c.open) cls += ` open${c.mine ? " mine" : c.n ? ` n${c.n}` : ""}`;
   else if (c.flag) cls += " flag";
   el.className = cls;
-  el.textContent = c.open && !c.mine && numbered[i] && c.n ? c.n : "";
+  el.textContent = c.open && !c.mine && c.n ? c.n : "";
   if (tint && c.open && !c.mine) {
     const k = full ? 1 : 0.5, [r, g, b] = tint[i];
     el.style.background = `rgb(${Math.round(r * k + 28 * (1 - k))},${Math.round(g * k + 28 * (1 - k))},${Math.round(b * k + 28 * (1 - k))})`;
@@ -220,7 +211,7 @@ function reveal(start) {
     if (c.open || c.flag) continue;
     c.open = true; opened++;
     paint(i);
-    if (!c.mine && numbered[i] && c.n === 0) stack.push(...neighbors(i));
+    if (!c.mine && c.n === 0) stack.push(...neighbors(i));
   }
 }
 
@@ -240,7 +231,7 @@ function open(i) {
 
 function chord(i) {
   const c = cells[i];
-  if (state !== "play" || !c.open || !c.n || !numbered[i]) return;
+  if (state !== "play" || !c.open || !c.n) return;
   const around = neighbors(i);
   if (around.filter(j => cells[j].flag).length !== c.n) return;
   for (const j of around) {
